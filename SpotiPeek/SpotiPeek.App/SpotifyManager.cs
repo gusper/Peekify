@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using SpotifyAPI.SpotifyLocalAPI;
 
@@ -15,10 +11,17 @@ namespace SpotiPeek.App
         private SpotifyEventHandler _sEvents;
         private SpotifyMusicHandler _sMusic;
 
+        public event EventHandler TrackChanged;
+
         public SpotifyManager()
         {
-            _sApi = new SpotifyLocalAPIClass();            
-            
+            InitializeSpotifyConnection();
+        }
+
+        private void InitializeSpotifyConnection()
+        {
+            _sApi = new SpotifyLocalAPIClass();
+
             if (!SpotifyLocalAPIClass.IsSpotifyRunning())
             {
                 _sApi.RunSpotify();
@@ -38,7 +41,15 @@ namespace SpotiPeek.App
             }
 
             _sMusic = _sApi.GetMusicHandler();
+
             _sEvents = _sApi.GetEventHandler();
+            _sEvents.OnTrackChange += OnTrackChanged;
+            _sEvents.ListenForEvents(true);
+        }
+
+        private void OnTrackChanged(TrackChangeEventArgs e)
+        {
+            TrackChanged.Invoke(this, new EventArgs());
         }
 
         public string CurrentTrackInfo
@@ -46,8 +57,8 @@ namespace SpotiPeek.App
             get
             {
                 _sApi.Update();
-                return string.Format("{0} by {1}", _sMusic.GetCurrentTrack().GetTrackName(), _sMusic.GetCurrentTrack().GetArtistName());
+                return string.Format("'{0}' by {1}", _sMusic.GetCurrentTrack().GetTrackName(), _sMusic.GetCurrentTrack().GetArtistName());
             }
-        }
+        }        
     }
 }
