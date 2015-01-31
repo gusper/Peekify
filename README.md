@@ -1,2 +1,2 @@
 # SpotiPeek
-We'll see if this ever deserves a description.
+Small Windows WPF application that displays the name of the song and artist currently playing on the local Spotify app.
