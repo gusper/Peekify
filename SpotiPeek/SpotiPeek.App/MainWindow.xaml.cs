@@ -20,6 +20,12 @@ namespace SpotiPeek.App
             TrackInfoLabel.MouseUp += TrackInfoLabel_MouseUp;
 
             _sm.TrackChanged += OnTrackChanged;
+            _sm.PlayStateChanged += OnPlayStateChanged;
+        }
+
+        void OnPlayStateChanged(object sender, EventArgs e)
+        {
+            RefreshContent();
         }
 
         void OnTrackChanged(object sender, EventArgs e)

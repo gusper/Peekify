@@ -12,6 +12,7 @@ namespace SpotiPeek.App
         private SpotifyMusicHandler _sMusic;
 
         public event EventHandler TrackChanged;
+        public event EventHandler PlayStateChanged;
 
         public SpotifyManager()
         {
@@ -44,7 +45,13 @@ namespace SpotiPeek.App
 
             _sEvents = _sApi.GetEventHandler();
             _sEvents.OnTrackChange += OnTrackChanged;
+            _sEvents.OnPlayStateChange += OnPlayStateChanged;
             _sEvents.ListenForEvents(true);
+        }
+
+        void OnPlayStateChanged(PlayStateEventArgs e)
+        {
+            PlayStateChanged.Invoke(this, new EventArgs());
         }
 
         private void OnTrackChanged(TrackChangeEventArgs e)
@@ -56,9 +63,22 @@ namespace SpotiPeek.App
         {
             get
             {
-                _sApi.Update();
-                return string.Format("'{0}' by {1}", _sMusic.GetCurrentTrack().GetTrackName(), _sMusic.GetCurrentTrack().GetArtistName());
+                Track track;
+                string nowPlayingText = string.Empty;
+
+                try
+                {
+                    _sApi.Update();
+                    track = _sMusic.GetCurrentTrack();
+                    nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
+                }
+                catch (NullReferenceException nre)
+                {
+                    nowPlayingText = "Spotify error";
+                }
+
+                return nowPlayingText;
             }
-        }        
+        }
     }
 }
