@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows;
 using SpotifyAPI.SpotifyLocalAPI;
+using WinForms = System.Windows.Forms;
 
 namespace SpotiPeek.App
 {
@@ -11,15 +12,38 @@ namespace SpotiPeek.App
         private SpotifyEventHandler _sEvents;
         private SpotifyMusicHandler _sMusic;
 
+        private bool _errorState = false;
+        private WinForms.Timer _timer;
+
         public event EventHandler TrackChanged;
         public event EventHandler PlayStateChanged;
 
         public SpotifyManager()
         {
-            InitializeSpotifyConnection();
+            ConnectToLocalSpotifyClient();
+            InitializeConnectionErrorTimer();
         }
 
-        private void InitializeSpotifyConnection()
+        private void InitializeConnectionErrorTimer()
+        {
+            _timer = new WinForms.Timer();
+            _timer.Interval = 20000;
+            _timer.Tick += ConnectionErrorRepairHandler;
+            _timer.Enabled = true;
+            _timer.Start();            
+        }
+
+        void ConnectionErrorRepairHandler(object sender, EventArgs e)
+        {
+            if (!_errorState)
+            {
+                return;
+            }
+
+            ConnectToLocalSpotifyClient();            
+        }
+
+        private void ConnectToLocalSpotifyClient()
         {
             _sApi = new SpotifyLocalAPIClass();
 
@@ -37,19 +61,22 @@ namespace SpotiPeek.App
 
             if (!_sApi.Connect())
             {
-                MessageBox.Show("Failed to connect to Spotify.", "SpotiPeek", MessageBoxButton.OK);
-                Application.Current.Shutdown(-1);
+                _errorState = true;
             }
+            else
+            {
+                _sMusic = _sApi.GetMusicHandler();
 
-            _sMusic = _sApi.GetMusicHandler();
+                _sEvents = _sApi.GetEventHandler();
+                _sEvents.OnTrackChange += OnTrackChanged;
+                _sEvents.OnPlayStateChange += OnPlayStateChanged;
+                _sEvents.ListenForEvents(true);
 
-            _sEvents = _sApi.GetEventHandler();
-            _sEvents.OnTrackChange += OnTrackChanged;
-            _sEvents.OnPlayStateChange += OnPlayStateChanged;
-            _sEvents.ListenForEvents(true);
+                _errorState = false;
+            }
         }
 
-        void OnPlayStateChanged(PlayStateEventArgs e)
+        private void OnPlayStateChanged(PlayStateEventArgs e)
         {
             PlayStateChanged.Invoke(this, new EventArgs());
         }
@@ -72,9 +99,10 @@ namespace SpotiPeek.App
                     track = _sMusic.GetCurrentTrack();
                     nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
                 }
-                catch (NullReferenceException nre)
+                catch (NullReferenceException)
                 {
-                    nowPlayingText = "Spotify error";
+                    nowPlayingText = "Spotify connection error";
+                    _errorState = true;
                 }
 
                 return nowPlayingText;
