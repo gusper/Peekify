@@ -23,12 +23,12 @@ namespace SpotiPeek.App
             _sm.PlayStateChanged += OnPlayStateChanged;
         }
 
-        void OnPlayStateChanged(object sender, EventArgs e)
+        private void OnPlayStateChanged(object sender, EventArgs e)
         {
             RefreshContent();
         }
 
-        void OnTrackChanged(object sender, EventArgs e)
+        private void OnTrackChanged(object sender, EventArgs e)
         {
             RefreshContent();
         }
@@ -43,7 +43,22 @@ namespace SpotiPeek.App
             Dispatcher.Invoke((Action)(() =>
             {
                 TrackInfoLabel.Content = _sm.CurrentTrackInfo;
+                CheckAndRespondToErrorState();
             }));
+        }
+
+        private void CheckAndRespondToErrorState()
+        {
+            if (_sm.IsInErrorState)
+            {
+                // Show reconnect/refresh button
+                ReconnectButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // Hide the reconnect/refresh button
+                ReconnectButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         protected override void OnInitialized(EventArgs e)

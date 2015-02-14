@@ -1,7 +1,6 @@
-﻿using System;
+﻿using SpotifyAPI.SpotifyLocalAPI;
+using System;
 using System.Threading;
-using System.Windows;
-using SpotifyAPI.SpotifyLocalAPI;
 using WinForms = System.Windows.Forms;
 
 namespace SpotiPeek.App
@@ -24,23 +23,51 @@ namespace SpotiPeek.App
             InitializeConnectionErrorTimer();
         }
 
+        public bool IsInErrorState
+        {
+            get { return _errorState; }
+        }
+
+        public string CurrentTrackInfo
+        {
+            get
+            {
+                Track track;
+                string nowPlayingText = string.Empty;
+
+                try
+                {
+                    _sApi.Update();
+                    track = _sMusic.GetCurrentTrack();
+                    nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
+                }
+                catch (NullReferenceException)
+                {
+                    nowPlayingText = "Failed to connect to Spotify";
+                    _errorState = true;
+                }
+
+                return nowPlayingText;
+            }
+        }
+
         private void InitializeConnectionErrorTimer()
         {
             _timer = new WinForms.Timer();
             _timer.Interval = 20000;
             _timer.Tick += ConnectionErrorRepairHandler;
             _timer.Enabled = true;
-            _timer.Start();            
+            _timer.Start();
         }
 
-        void ConnectionErrorRepairHandler(object sender, EventArgs e)
+        private void ConnectionErrorRepairHandler(object sender, EventArgs e)
         {
             if (!_errorState)
             {
                 return;
             }
 
-            ConnectToLocalSpotifyClient();            
+            ConnectToLocalSpotifyClient();
         }
 
         private void ConnectToLocalSpotifyClient()
@@ -86,27 +113,5 @@ namespace SpotiPeek.App
             TrackChanged.Invoke(this, new EventArgs());
         }
 
-        public string CurrentTrackInfo
-        {
-            get
-            {
-                Track track;
-                string nowPlayingText = string.Empty;
-
-                try
-                {
-                    _sApi.Update();
-                    track = _sMusic.GetCurrentTrack();
-                    nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
-                }
-                catch (NullReferenceException)
-                {
-                    nowPlayingText = "Spotify connection error";
-                    _errorState = true;
-                }
-
-                return nowPlayingText;
-            }
-        }
     }
 }

@@ -7,6 +7,12 @@
         Opacity=".4" SizeToContent="WidthAndHeight"
         Background="#000" AllowsTransparency="True">
 
-    <Label x:Name="TrackInfoLabel" Content="Loading..." Foreground="White" />
-
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" x:Name="ReconnectButton" Content="Reconnect" Padding="3" Background="DarkRed" Foreground="White"/>
+        <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="White" />
+    </Grid>
 </Window>
