@@ -6,12 +6,21 @@ namespace SpotiPeek.App
 {
     public partial class MainWindow : Window
     {
-        private SpotifyManager _sm = new SpotifyManager();
+        private SpotifyManager _sm;
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+
+            _sm = new SpotifyManager();
             HookUpEventHandlers();
+            CheckAndRespondToErrorState();
+            RefreshContent();
         }
 
         private void HookUpEventHandlers()
@@ -22,6 +31,12 @@ namespace SpotiPeek.App
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
+            _sm.ErrorStateChanged += OnErrorStateChanged;
+        }
+
+        private void OnErrorStateChanged(object sender, EventArgs e)
+        {
+            CheckAndRespondToErrorState();
         }
 
         private void ReconnectButton_Click(object sender, RoutedEventArgs e)
@@ -50,7 +65,6 @@ namespace SpotiPeek.App
             Dispatcher.Invoke((Action)(() =>
             {
                 TrackInfoLabel.Content = _sm.CurrentTrackInfo;
-                CheckAndRespondToErrorState();
             }));
         }
 
@@ -71,10 +85,5 @@ namespace SpotiPeek.App
             }
         }
 
-        protected override void OnInitialized(EventArgs e)
-        {
-            base.OnInitialized(e);
-            RefreshContent();
-        }
     }
 }

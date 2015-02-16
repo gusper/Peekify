@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using WinForms = System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace SpotiPeek.App
 {
@@ -17,6 +18,7 @@ namespace SpotiPeek.App
 
         public event EventHandler TrackChanged;
         public event EventHandler PlayStateChanged;
+        public event EventHandler ErrorStateChanged;
 
         public SpotifyManager()
         {
@@ -39,18 +41,18 @@ namespace SpotiPeek.App
             get
             {
                 Track track;
-                string nowPlayingText = string.Empty;
+                string nowPlayingText = "Unknown";
 
                 try
                 {
                     _sApi.Update();
                     track = _sMusic.GetCurrentTrack();
                     nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
+                    ReportErrorStateChange(false);
                 }
                 catch (NullReferenceException)
                 {
-                    nowPlayingText = string.Empty;
-                    _errorState = true;
+                    ReportErrorStateChange(true, "Error getting Spotify track information");
                     ConnectToLocalSpotifyClient();
                 }
 
@@ -91,38 +93,24 @@ namespace SpotiPeek.App
 
             if (!SpotifyLocalAPIClass.IsSpotifyRunning())
             {
-                _errorStatusText = "Spotify is not running";
-                _errorState = true;
+                ReportErrorStateChange(true, "Spotify is not running");
                 return;
-
-                //_sApi.RunSpotify();
-                //Thread.Sleep(4000);
-
-                //if (!SpotifyLocalAPIClass.IsSpotifyRunning())
-                //{
-                //    _errorStatusText = "Failed to launch Spotify";
-                //    _errorState = true;
-                //    return;
-                //}
             }
 
             if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
             {
                 _sApi.RunSpotifyWebHelper();
-                Thread.Sleep(4000);
-
+    
                 if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
                 {
-                    _errorStatusText = "Failed to launch Spotify Web Helper";
-                    _errorState = true;
+                    ReportErrorStateChange(true, "Failed to launch Spotify Web Helper");
                     return;
                 }
             }
 
             if (!_sApi.Connect())
             {
-                _errorStatusText = "Failed to connect to Spotify";
-                _errorState = true;
+                ReportErrorStateChange(true, "Failed to connect to Spotify");
             }
             else
             {
@@ -133,18 +121,35 @@ namespace SpotiPeek.App
                 _sEvents.OnPlayStateChange += OnPlayStateChanged;
                 _sEvents.ListenForEvents(true);
 
-                _errorState = false;
+                ReportErrorStateChange(false);
+            }
+        }
+
+        private void ReportErrorStateChange(bool isInErrorState, string errorText = "")
+        {
+            _errorStatusText = errorText;
+            _errorState = isInErrorState;
+
+            if (ErrorStateChanged != null)
+            {
+                ErrorStateChanged.Invoke(this, null);
             }
         }
 
         private void OnPlayStateChanged(PlayStateEventArgs e)
         {
-            PlayStateChanged.Invoke(this, new EventArgs());
+            if (PlayStateChanged != null)
+            {
+                PlayStateChanged.Invoke(this, new EventArgs());
+            }
         }
 
         private void OnTrackChanged(TrackChangeEventArgs e)
         {
-            TrackChanged.Invoke(this, new EventArgs());
+            if (TrackChanged != null)
+            {
+                TrackChanged.Invoke(this, new EventArgs());
+            }
         }
     }
 }
