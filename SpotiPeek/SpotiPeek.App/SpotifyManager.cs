@@ -12,6 +12,7 @@ namespace SpotiPeek.App
         private SpotifyMusicHandler _sMusic;
 
         private bool _errorState = false;
+        private string _errorStatusText = string.Empty;
         private WinForms.Timer _timer;
 
         public event EventHandler TrackChanged;
@@ -26,6 +27,11 @@ namespace SpotiPeek.App
         public bool IsInErrorState
         {
             get { return _errorState; }
+        }
+
+        public string ErrorStatusText
+        {
+            get { return _errorStatusText; }
         }
 
         public string CurrentTrackInfo
@@ -43,11 +49,20 @@ namespace SpotiPeek.App
                 }
                 catch (NullReferenceException)
                 {
-                    nowPlayingText = "Failed to connect to Spotify";
+                    nowPlayingText = string.Empty;
                     _errorState = true;
+                    ConnectToLocalSpotifyClient();
                 }
 
                 return nowPlayingText;
+            }
+        }
+
+        public void ReconnectToSpotify()
+        {
+            if (_errorState)
+            {
+                ConnectToLocalSpotifyClient();
             }
         }
 
@@ -57,7 +72,7 @@ namespace SpotiPeek.App
             _timer.Interval = 20000;
             _timer.Tick += ConnectionErrorRepairHandler;
             _timer.Enabled = true;
-            _timer.Start();
+            //_timer.Start();
         }
 
         private void ConnectionErrorRepairHandler(object sender, EventArgs e)
@@ -76,18 +91,37 @@ namespace SpotiPeek.App
 
             if (!SpotifyLocalAPIClass.IsSpotifyRunning())
             {
-                _sApi.RunSpotify();
-                Thread.Sleep(4000);
+                _errorStatusText = "Spotify is not running";
+                _errorState = true;
+                return;
+
+                //_sApi.RunSpotify();
+                //Thread.Sleep(4000);
+
+                //if (!SpotifyLocalAPIClass.IsSpotifyRunning())
+                //{
+                //    _errorStatusText = "Failed to launch Spotify";
+                //    _errorState = true;
+                //    return;
+                //}
             }
 
             if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
             {
                 _sApi.RunSpotifyWebHelper();
                 Thread.Sleep(4000);
+
+                if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
+                {
+                    _errorStatusText = "Failed to launch Spotify Web Helper";
+                    _errorState = true;
+                    return;
+                }
             }
 
             if (!_sApi.Connect())
             {
+                _errorStatusText = "Failed to connect to Spotify";
                 _errorState = true;
             }
             else
@@ -112,6 +146,5 @@ namespace SpotiPeek.App
         {
             TrackChanged.Invoke(this, new EventArgs());
         }
-
     }
 }

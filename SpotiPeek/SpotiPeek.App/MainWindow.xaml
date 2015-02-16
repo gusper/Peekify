@@ -12,7 +12,10 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" x:Name="ReconnectButton" Content="Reconnect" Padding="3" Background="DarkRed" Foreground="White"/>
-        <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="White" />
+        <StackPanel Grid.Column="0" x:Name="StatusStackPanel" Orientation="Horizontal">
+            <Button x:Name="ReconnectButton" Content="Reconnect" Padding="3" Background="DarkRed" Foreground="White"/>
+            <Label x:Name="StatusInfoLabel" Foreground="LightPink"/>
+        </StackPanel>
+        <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="#fff" />
     </Grid>
 </Window>
