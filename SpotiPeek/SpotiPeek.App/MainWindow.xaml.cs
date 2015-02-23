@@ -36,7 +36,7 @@ namespace SpotiPeek.App
 
         private void HookUpEventHandlers()
         {
-            this.MouseLeftButtonDown += delegate { DragMove(); };
+            MouseLeftButtonDown += delegate { DragMove(); };
             TrackInfoLabel.MouseUp += TrackInfoLabel_MouseUp;
 
             _sm.TrackChanged += OnTrackChanged;

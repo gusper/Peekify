@@ -12,7 +12,7 @@ namespace SpotiPeek.App
 
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
-        
+
         public event EventHandler TrackChanged;
         public event EventHandler PlayStateChanged;
         public event EventHandler ErrorStateChanged;
@@ -95,7 +95,7 @@ namespace SpotiPeek.App
             if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
             {
                 _sApi.RunSpotifyWebHelper();
-    
+
                 if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
                 {
                     ReportErrorStateChange(true, "Failed to launch Spotify Web Helper");
