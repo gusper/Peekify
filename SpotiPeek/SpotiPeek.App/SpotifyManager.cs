@@ -1,8 +1,6 @@
 ﻿using SpotifyAPI.SpotifyLocalAPI;
 using System;
-using System.Threading;
-using WinForms = System.Windows.Forms;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace SpotiPeek.App
 {
@@ -78,12 +76,10 @@ namespace SpotiPeek.App
             }
         }
 
-        public void ReconnectToSpotify()
+        public static bool IsSpotifyBetaInstalled()
         {
-            if (_errorState)
-            {
-                ConnectToLocalSpotifyClient();
-            }
+            var pathToExe = @"\spotifybeta\spotifybeta.exe";
+            return File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + pathToExe);
         }
 
         private bool ConnectToLocalSpotifyClient()

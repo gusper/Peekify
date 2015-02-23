@@ -17,10 +17,21 @@ namespace SpotiPeek.App
         {
             base.OnInitialized(e);
 
+            EnsureSpotifyBetaIsInstalled();
+
             _sm = new SpotifyManager();
             HookUpEventHandlers();
             CheckAndRespondToErrorState();
             RefreshContent();
+        }
+
+        private void EnsureSpotifyBetaIsInstalled()
+        {
+            if (!SpotifyManager.IsSpotifyBetaInstalled())
+            {
+                MessageBox.Show("Spotify Beta must be installed to run SpotiPeek", "Can't find Spotify Beta");
+                Environment.Exit(-1);
+            }
         }
 
         private void HookUpEventHandlers()
