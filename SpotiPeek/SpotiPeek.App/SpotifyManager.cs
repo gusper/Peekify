@@ -23,7 +23,6 @@ namespace SpotiPeek.App
         public SpotifyManager()
         {
             ConnectToLocalSpotifyClient();
-            InitializeConnectionErrorTimer();
         }
 
         public bool IsInErrorState
@@ -42,18 +41,38 @@ namespace SpotiPeek.App
             {
                 Track track;
                 string nowPlayingText = "Unknown";
+                var attemptsLeft = 3;
 
-                try
+                while (attemptsLeft-- > 0)
                 {
-                    _sApi.Update();
-                    track = _sMusic.GetCurrentTrack();
-                    nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
-                    ReportErrorStateChange(false);
-                }
-                catch (NullReferenceException)
-                {
-                    ReportErrorStateChange(true, "Error getting Spotify track information");
-                    ConnectToLocalSpotifyClient();
+                    try
+                    {
+                        _sApi.Update();
+                        track = _sMusic.GetCurrentTrack();
+                        nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
+                        ReportErrorStateChange(false);
+                        break;
+                    }
+                    catch (NullReferenceException)
+                    {
+                        if (ConnectToLocalSpotifyClient())
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (!SpotifyLocalAPIClass.IsSpotifyRunning())
+                            {
+                                ReportErrorStateChange(true, "Spotify is not running.");
+                            }
+                            else
+                            {
+                                ReportErrorStateChange(true, "Error getting Spotify track information.");
+                            }
+
+                            break;
+                        }
+                    }
                 }
 
                 return nowPlayingText;
@@ -68,33 +87,14 @@ namespace SpotiPeek.App
             }
         }
 
-        private void InitializeConnectionErrorTimer()
+        private bool ConnectToLocalSpotifyClient()
         {
-            _timer = new WinForms.Timer();
-            _timer.Interval = 20000;
-            _timer.Tick += ConnectionErrorRepairHandler;
-            _timer.Enabled = true;
-            //_timer.Start();
-        }
-
-        private void ConnectionErrorRepairHandler(object sender, EventArgs e)
-        {
-            if (!_errorState)
-            {
-                return;
-            }
-
-            ConnectToLocalSpotifyClient();
-        }
-
-        private void ConnectToLocalSpotifyClient()
-        {
-            _sApi = new SpotifyLocalAPIClass();
+            _sApi = new SpotifyLocalAPIClass(true);
 
             if (!SpotifyLocalAPIClass.IsSpotifyRunning())
             {
                 ReportErrorStateChange(true, "Spotify is not running");
-                return;
+                return false;
             }
 
             if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
@@ -104,13 +104,14 @@ namespace SpotiPeek.App
                 if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
                 {
                     ReportErrorStateChange(true, "Failed to launch Spotify Web Helper");
-                    return;
+                    return false;
                 }
             }
 
             if (!_sApi.Connect())
             {
                 ReportErrorStateChange(true, "Failed to connect to Spotify");
+                return false;
             }
             else
             {
@@ -123,6 +124,8 @@ namespace SpotiPeek.App
 
                 ReportErrorStateChange(false);
             }
+
+            return true;
         }
 
         private void ReportErrorStateChange(bool isInErrorState, string errorText = "")

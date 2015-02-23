@@ -27,7 +27,6 @@ namespace SpotiPeek.App
         {
             this.MouseLeftButtonDown += delegate { DragMove(); };
             TrackInfoLabel.MouseUp += TrackInfoLabel_MouseUp;
-            ReconnectButton.Click += ReconnectButton_Click;
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
@@ -37,12 +36,6 @@ namespace SpotiPeek.App
         private void OnErrorStateChanged(object sender, EventArgs e)
         {
             CheckAndRespondToErrorState();
-        }
-
-        private void ReconnectButton_Click(object sender, RoutedEventArgs e)
-        {
-            _sm.ReconnectToSpotify();
-            RefreshContent();
         }
 
         private void OnPlayStateChanged(object sender, EventArgs e)
@@ -72,18 +65,17 @@ namespace SpotiPeek.App
         {
             if (_sm.IsInErrorState)
             {
-                // Show reconnect/refresh button
+                // Show error information
                 StatusStackPanel.Visibility = Visibility.Visible;
                 TrackInfoLabel.Visibility = Visibility.Collapsed;
                 StatusInfoLabel.Content = _sm.ErrorStatusText;
             }
             else
             {
-                // Hide the reconnect/refresh button
+                // Show track information
                 StatusStackPanel.Visibility = Visibility.Collapsed;
                 TrackInfoLabel.Visibility = Visibility.Visible;
             }
         }
-
     }
 }
