@@ -14,8 +14,7 @@ namespace SpotiPeek.App
 
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
-        private WinForms.Timer _timer;
-
+        
         public event EventHandler TrackChanged;
         public event EventHandler PlayStateChanged;
         public event EventHandler ErrorStateChanged;
