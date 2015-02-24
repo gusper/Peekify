@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace SpotiPeek.App.ApplicationSettings
 {
-    class AppSettingsStore<TData>
+    class AppSettingsStore<TData> where TData : new()
     {
         private string _filePath;
         private string _fileName;
@@ -25,7 +25,7 @@ namespace SpotiPeek.App.ApplicationSettings
 
         public TData Load()
         {
-            TData data = default(TData);
+            TData data = new TData();
 
             if (File.Exists(GetPathAndFilename()))
             {

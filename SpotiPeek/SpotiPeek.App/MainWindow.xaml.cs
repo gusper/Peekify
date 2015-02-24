@@ -7,6 +7,7 @@ namespace SpotiPeek.App
     public partial class MainWindow : Window
     {
         private SpotifyManager _sm;
+        private App _app = (App)Application.Current;
 
         public MainWindow()
         {
@@ -17,12 +18,25 @@ namespace SpotiPeek.App
         {
             base.OnInitialized(e);
 
+            RestoreStateFromSettings();
+
             EnsureSpotifyBetaIsInstalled();
 
             _sm = new SpotifyManager();
             HookUpEventHandlers();
             CheckAndRespondToErrorState();
             RefreshContent();
+        }
+
+        private void RestoreStateFromSettings()
+        {
+            RestoreStartupWindowLocation();
+        }
+
+        private void RestoreStartupWindowLocation()
+        {
+            Left = _app.Settings.WindowLocationLeft;
+            Top = _app.Settings.WindowLocationTop;
         }
 
         private void EnsureSpotifyBetaIsInstalled()
@@ -47,8 +61,14 @@ namespace SpotiPeek.App
         private void OnAfterDragWindow(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+            SaveStateToSettings();
+        }
 
-            // TODO: Remember location across sessions
+        private void SaveStateToSettings()
+        {
+            _app.Settings.WindowLocationLeft = (int)Left;
+            _app.Settings.WindowLocationTop = (int)Top;
+            _app.SaveSettings();
         }
 
         private void OnErrorStateChanged(object sender, EventArgs e)

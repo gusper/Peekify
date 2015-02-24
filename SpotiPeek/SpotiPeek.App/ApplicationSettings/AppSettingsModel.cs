@@ -11,9 +11,9 @@ namespace SpotiPeek.App.ApplicationSettings
     public class AppSettingsModel
     {
         [DataMember]
-        public int LocationX { get; set; }
+        public int WindowLocationLeft { get; set; }
 
         [DataMember]
-        public int LocationY { get; set; }
+        public int WindowLocationTop { get; set; }
     }
 }
