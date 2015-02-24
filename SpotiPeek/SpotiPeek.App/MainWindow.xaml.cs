@@ -66,10 +66,10 @@ namespace SpotiPeek.App
 
         private void RefreshContent()
         {
-            Dispatcher.Invoke((Action)(() =>
+            Dispatcher.Invoke(() =>
             {
                 TrackInfoLabel.Content = _sm.CurrentTrackInfo;
-            }));
+            });
         }
 
         private void CheckAndRespondToErrorState()
