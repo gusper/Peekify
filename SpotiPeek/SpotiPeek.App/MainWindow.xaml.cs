@@ -36,12 +36,19 @@ namespace SpotiPeek.App
 
         private void HookUpEventHandlers()
         {
-            MouseLeftButtonDown += delegate { DragMove(); };
-            TrackInfoLabel.MouseUp += TrackInfoLabel_MouseUp;
+            MouseLeftButtonDown += OnAfterDragWindow;
+            TrackInfoLabel.MouseUp += OnAnyMouseButtonUp;
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
             _sm.ErrorStateChanged += OnErrorStateChanged;
+        }
+
+        private void OnAfterDragWindow(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+
+            // TODO: Remember location across sessions
         }
 
         private void OnErrorStateChanged(object sender, EventArgs e)
@@ -59,7 +66,7 @@ namespace SpotiPeek.App
             RefreshContent();
         }
 
-        private void TrackInfoLabel_MouseUp(object sender, MouseButtonEventArgs e)
+        private void OnAnyMouseButtonUp(object sender, MouseButtonEventArgs e)
         {
             RefreshContent();
         }
