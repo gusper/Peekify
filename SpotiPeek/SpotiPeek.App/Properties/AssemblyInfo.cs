@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SpotiPeek.App")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SpotiPeek")]
+[assembly: AssemblyDescription("Offers a quick peek at what's playing on your Spotify player")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SpotiPeek.App")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Gus Perez")]
+[assembly: AssemblyProduct("SpotiPeek")]
+[assembly: AssemblyCopyright("Copyright © 2015 Gus Perez")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
