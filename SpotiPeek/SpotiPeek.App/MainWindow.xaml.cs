@@ -28,6 +28,15 @@ namespace SpotiPeek.App
             RefreshContent();
         }
 
+        private void EnsureSpotifyIsInstalled()
+        {
+            if (!SpotifyManager.IsSpotifyInstalled())
+            {
+                MessageBox.Show("Spotify must be installed to run SpotiPeek", "Can't find Spotify");
+                Environment.Exit(-1);
+            }
+        }
+
         private void RestoreStateFromSettings()
         {
             RestoreStartupWindowLocation();
@@ -38,16 +47,7 @@ namespace SpotiPeek.App
             Left = _app.Settings.WindowLocationLeft;
             Top = _app.Settings.WindowLocationTop;
         }
-
-        private void EnsureSpotifyIsInstalled()
-        {
-            if (!SpotifyManager.IsSpotifyInstalled())
-            {
-                MessageBox.Show("Spotify must be installed to run SpotiPeek", "Can't find Spotify");
-                Environment.Exit(-1);
-            }
-        }
-
+        
         private void HookUpEventHandlers()
         {
             MouseLeftButtonDown += OnAfterDragWindow;
