@@ -1,5 +1,6 @@
 ﻿using SpotifyAPI.SpotifyLocalAPI;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace SpotiPeek.App
@@ -10,6 +11,9 @@ namespace SpotiPeek.App
         private SpotifyEventHandler _sEvents;
         private SpotifyMusicHandler _sMusic;
 
+        private static string _spotifyExecutable;
+        private static bool _useSpotifyBeta;
+
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
 
@@ -17,9 +21,28 @@ namespace SpotiPeek.App
         public event EventHandler PlayStateChanged;
         public event EventHandler ErrorStateChanged;
 
+        static SpotifyManager()
+        {
+            _spotifyExecutable = FindSpotifyExe();
+        }
+
         public SpotifyManager()
         {
             ConnectToLocalSpotifyClient();
+        }
+
+        private static string FindSpotifyExe()
+        {
+            var args = Environment.GetCommandLineArgs();
+
+            if (args[0] == "beta")
+            {
+                _useSpotifyBeta = true;
+                return @"\spotifybeta\spotifybeta.exe";
+            }
+
+            _useSpotifyBeta = false;
+            return @"\spotify\spotify.exe";            
         }
 
         public bool IsInErrorState
@@ -76,15 +99,16 @@ namespace SpotiPeek.App
             }
         }
 
-        public static bool IsSpotifyBetaInstalled()
+        public static bool IsSpotifyInstalled()
         {
-            var pathToExe = @"\spotifybeta\spotifybeta.exe";
-            return File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + pathToExe);
+            string pathToSpotify = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + _spotifyExecutable;
+            Debug.WriteLine(pathToSpotify);
+            return File.Exists(pathToSpotify);
         }
 
         private bool ConnectToLocalSpotifyClient()
         {
-            _sApi = new SpotifyLocalAPIClass(true);
+            _sApi = new SpotifyLocalAPIClass(_useSpotifyBeta);
 
             if (!SpotifyLocalAPIClass.IsSpotifyRunning())
             {
