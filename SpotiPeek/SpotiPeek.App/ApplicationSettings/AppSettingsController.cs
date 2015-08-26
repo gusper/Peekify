@@ -17,7 +17,8 @@ namespace SpotiPeek.App.ApplicationSettings
         {
             _settings = new AppSettingsModel();
             var directoryName = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
-            var fileName = "spotipeek.settings.xml";
+            var machineName = Environment.MachineName.ToLower();
+            var fileName = "spotipeek.settings." + machineName + ".xml";
             _settingsStore = new AppSettingsStore<AppSettingsModel>(directoryName, fileName);
         }
 
