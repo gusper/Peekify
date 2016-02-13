@@ -35,7 +35,7 @@ namespace SpotiPeek.App
         {
             var args = Environment.GetCommandLineArgs();
 
-            if (args[0] == "beta")
+            if (args[0].ToLower() == "beta")
             {
                 _useSpotifyBeta = true;
                 return @"\spotifybeta\spotifybeta.exe";
