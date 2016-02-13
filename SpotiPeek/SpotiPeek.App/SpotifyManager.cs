@@ -42,7 +42,7 @@ namespace SpotiPeek.App
             }
 
             _useSpotifyBeta = false;
-            return @"\spotify\spotify.exe";            
+            return @"\spotify\spotify.exe";
         }
 
         public bool IsInErrorState
