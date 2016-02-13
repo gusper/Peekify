@@ -13,7 +13,7 @@
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
     <StackPanel Grid.Column="0" x:Name="StatusStackPanel" Orientation="Horizontal">
-      <Label x:Name="StatusInfoLabel" Foreground="LightPink" />
+      <Label x:Name="StatusInfoLabel" Foreground="LightPink" FontFamily="Segoe UI" FontSize="9"/>
     </StackPanel>
     <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="#fff" FontFamily="Segoe UI" FontSize="9"/>
   </Grid>
