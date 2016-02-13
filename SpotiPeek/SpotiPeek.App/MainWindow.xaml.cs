@@ -37,17 +37,6 @@ namespace SpotiPeek.App
             }
         }
 
-        private void RestoreStateFromSettings()
-        {
-            RestoreStartupWindowLocation();
-        }
-
-        private void RestoreStartupWindowLocation()
-        {
-            Left = _app.Settings.WindowLocationLeft;
-            Top = _app.Settings.WindowLocationTop;
-        }
-        
         private void HookUpEventHandlers()
         {
             MouseLeftButtonDown += OnAfterDragWindow;
@@ -58,6 +47,17 @@ namespace SpotiPeek.App
             _sm.ErrorStateChanged += OnErrorStateChanged;
         }
 
+        private void RestoreStateFromSettings()
+        {
+            RestoreStartupWindowLocation();
+        }
+
+        private void RestoreStartupWindowLocation()
+        {
+            Left = Math.Abs(_app.Settings.WindowLocationLeft);
+            Top = Math.Abs(_app.Settings.WindowLocationTop);
+        }
+
         private void OnAfterDragWindow(object sender, MouseButtonEventArgs e)
         {
             DragMove();
@@ -66,8 +66,8 @@ namespace SpotiPeek.App
 
         private void SaveStateToSettings()
         {
-            _app.Settings.WindowLocationLeft = (int)Left;
-            _app.Settings.WindowLocationTop = (int)Top;
+            _app.Settings.WindowLocationLeft = (int)Math.Abs(Left);
+            _app.Settings.WindowLocationTop = (int)Math.Abs(Top);
             _app.SaveSettings();
         }
 
