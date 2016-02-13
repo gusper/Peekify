@@ -18,4 +18,9 @@
     <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="#fff" FontFamily="Segoe UI" FontSize="9"/>
   </Grid>
 
+  <Window.ContextMenu>
+    <ContextMenu>
+      <MenuItem Header="Exit" Name="ContextMenuExit"/>
+    </ContextMenu>
+  </Window.ContextMenu>
 </Window>
