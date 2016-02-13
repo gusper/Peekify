@@ -7,14 +7,15 @@
         Opacity=".4" SizeToContent="WidthAndHeight"
         Background="#000" AllowsTransparency="True">
 
-    <Grid Margin="0,-5">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" x:Name="StatusStackPanel" Orientation="Horizontal">
-            <Label x:Name="StatusInfoLabel" Foreground="LightPink" />
-        </StackPanel>
-        <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="#fff" FontFamily="Segoe UI" FontSize="9"/>
-    </Grid>
+  <Grid Margin="0,-5">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <StackPanel Grid.Column="0" x:Name="StatusStackPanel" Orientation="Horizontal">
+      <Label x:Name="StatusInfoLabel" Foreground="LightPink" />
+    </StackPanel>
+    <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="#fff" FontFamily="Segoe UI" FontSize="9"/>
+  </Grid>
+
 </Window>
