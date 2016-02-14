@@ -41,7 +41,7 @@ namespace SpotiPeek.App
         {
             ContextMenuExit.Click += ContextMenuExit_Click;
             MouseLeftButtonDown += OnAfterDragWindow;
-            TrackInfoLabel.MouseUp += OnAnyMouseButtonUp;
+            MainPane.MouseUp += OnAnyMouseButtonUp;
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;

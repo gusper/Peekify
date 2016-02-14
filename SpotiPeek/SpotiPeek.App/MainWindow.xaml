@@ -7,7 +7,7 @@
         Opacity=".4" SizeToContent="WidthAndHeight"
         Background="#000" AllowsTransparency="True">
 
-  <Grid Margin="0,-5">
+  <Grid x:Name="MainPane" Margin="0,-5">
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
       <ColumnDefinition/>
