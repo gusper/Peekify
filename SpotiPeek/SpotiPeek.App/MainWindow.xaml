@@ -20,7 +20,9 @@
 
   <Window.ContextMenu>
     <ContextMenu>
-      <MenuItem Header="Exit" Name="ContextMenuExit"/>
+      <MenuItem Header="_Refresh" Name="ContextMenuRefresh"/>
+      <Separator/>
+      <MenuItem Header="E_xit" Name="ContextMenuExit"/>
     </ContextMenu>
   </Window.ContextMenu>
 </Window>

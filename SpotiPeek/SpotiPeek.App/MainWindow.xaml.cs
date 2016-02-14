@@ -40,12 +40,18 @@ namespace SpotiPeek.App
         private void HookUpEventHandlers()
         {
             ContextMenuExit.Click += ContextMenuExit_Click;
+            ContextMenuRefresh.Click += ContextMenuRefresh_Click;
             MouseLeftButtonDown += OnAfterDragWindow;
             MainPane.MouseUp += OnAnyMouseButtonUp;
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
             _sm.ErrorStateChanged += OnErrorStateChanged;
+        }
+
+        private void ContextMenuRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshContent();
         }
 
         private void ContextMenuExit_Click(object sender, RoutedEventArgs e)
