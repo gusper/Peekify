@@ -1,4 +1,6 @@
-﻿using SpotifyAPI.SpotifyLocalAPI;
+﻿using SpotifyAPI.Local;
+using SpotifyAPI.Local.Enums;
+using SpotifyAPI.Local.Models;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,12 +9,9 @@ namespace SpotiPeek.App
 {
     class SpotifyManager
     {
-        private SpotifyLocalAPIClass _sApi;
-        private SpotifyEventHandler _sEvents;
-        private SpotifyMusicHandler _sMusic;
+        private SpotifyLocalAPI _sApi;
 
-        private static string _spotifyExecutable;
-        private static bool _useSpotifyBeta;
+        private static string _spotifyExecutable = @"\spotify\spotify.exe";
 
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
@@ -21,28 +20,9 @@ namespace SpotiPeek.App
         public event EventHandler PlayStateChanged;
         public event EventHandler ErrorStateChanged;
 
-        static SpotifyManager()
-        {
-            _spotifyExecutable = FindSpotifyExe();
-        }
-
         public SpotifyManager()
         {
             ConnectToLocalSpotifyClient();
-        }
-
-        private static string FindSpotifyExe()
-        {
-            var args = Environment.GetCommandLineArgs();
-
-            if (args[0].ToLower() == "beta")
-            {
-                _useSpotifyBeta = true;
-                return @"\spotifybeta\spotifybeta.exe";
-            }
-
-            _useSpotifyBeta = false;
-            return @"\spotify\spotify.exe";
         }
 
         public bool IsInErrorState
@@ -59,7 +39,7 @@ namespace SpotiPeek.App
         {
             get
             {
-                Track track;
+                StatusResponse status;
                 string nowPlayingText = "Unknown";
                 var attemptsLeft = 3;
 
@@ -67,9 +47,8 @@ namespace SpotiPeek.App
                 {
                     try
                     {
-                        _sApi.Update();
-                        track = _sMusic.GetCurrentTrack();
-                        nowPlayingText = string.Format("'{0}' by {1}", track.GetTrackName(), track.GetArtistName());
+                        status = _sApi.GetStatus();
+                        nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
                         ReportErrorStateChange(false);
                         break;
                     }
@@ -81,7 +60,7 @@ namespace SpotiPeek.App
                         }
                         else
                         {
-                            if (!SpotifyLocalAPIClass.IsSpotifyRunning())
+                            if (!SpotifyLocalAPI.IsSpotifyRunning())
                             {
                                 ReportErrorStateChange(true, "Spotify is not running.");
                             }
@@ -108,23 +87,18 @@ namespace SpotiPeek.App
 
         private bool ConnectToLocalSpotifyClient()
         {
-            _sApi = new SpotifyLocalAPIClass(_useSpotifyBeta);
+            _sApi = new SpotifyLocalAPI();
 
-            if (!SpotifyLocalAPIClass.IsSpotifyRunning())
+            if (!SpotifyLocalAPI.IsSpotifyRunning())
             {
                 ReportErrorStateChange(true, "Spotify is not running");
                 return false;
             }
 
-            if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
+            if (!SpotifyLocalAPI.IsSpotifyWebHelperRunning())
             {
-                _sApi.RunSpotifyWebHelper();
-
-                if (!SpotifyLocalAPIClass.IsSpotifyWebHelperRunning())
-                {
-                    ReportErrorStateChange(true, "Failed to launch Spotify Web Helper");
-                    return false;
-                }
+                ReportErrorStateChange(true, "Spotify Web Helper not running");
+                return false;
             }
 
             if (!_sApi.Connect())
@@ -134,12 +108,9 @@ namespace SpotiPeek.App
             }
             else
             {
-                _sMusic = _sApi.GetMusicHandler();
-
-                _sEvents = _sApi.GetEventHandler();
-                _sEvents.OnTrackChange += OnTrackChanged;
-                _sEvents.OnPlayStateChange += OnPlayStateChanged;
-                _sEvents.ListenForEvents(true);
+                _sApi.OnTrackChange += OnTrackChanged;
+                _sApi.OnPlayStateChange += OnPlayStateChanged;
+                _sApi.ListenForEvents = true;
 
                 ReportErrorStateChange(false);
             }
@@ -158,7 +129,7 @@ namespace SpotiPeek.App
             }
         }
 
-        private void OnPlayStateChanged(PlayStateEventArgs e)
+        private void OnPlayStateChanged(object sender, PlayStateEventArgs e)
         {
             if (PlayStateChanged != null)
             {
@@ -166,7 +137,7 @@ namespace SpotiPeek.App
             }
         }
 
-        private void OnTrackChanged(TrackChangeEventArgs e)
+        private void OnTrackChanged(object sender, TrackChangeEventArgs e)
         {
             if (TrackChanged != null)
             {
