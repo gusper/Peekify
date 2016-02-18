@@ -12,10 +12,17 @@
       <ColumnDefinition/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
-    <StackPanel Grid.Column="0" x:Name="StatusStackPanel" Orientation="Horizontal">
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    <StackPanel Grid.Row="0" Grid.Column="0" x:Name="StatusStackPanel" Orientation="Horizontal">
       <Label x:Name="StatusInfoLabel" Foreground="LightPink" FontFamily="Segoe UI" FontSize="9"/>
     </StackPanel>
-    <Label Grid.Column="1" x:Name="TrackInfoLabel" Foreground="#fff" FontFamily="Segoe UI" FontSize="9"/>
+    <Label Grid.Row="0" Grid.Column="0" x:Name="TrackInfoLabel" Foreground="#fff" FontFamily="Segoe UI" FontSize="9"/>
+    <StackPanel Grid.Row="1" Grid.Column="0" x:Name="ImageStackPanel">
+      <Image x:Name="AlbumArtImage" Width="160" Height="160" />
+    </StackPanel>
   </Grid>
 
   <Window.ContextMenu>

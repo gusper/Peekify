@@ -4,6 +4,10 @@ using SpotifyAPI.Local.Models;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Media.Imaging;
+using System.Net;
+using System.Reflection;
+using System.Threading;
 
 namespace SpotiPeek.App
 {
@@ -12,9 +16,13 @@ namespace SpotiPeek.App
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
+        private const string MutexName = "com.zinkolabs.spotipeek";
+        private const int MutexTimeout = 750;
 
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
+        private string _nowPlayingText = string.Empty;
+        private BitmapSource _nowPlayingImage = null;
 
         public event EventHandler TrackChanged;
         public event EventHandler PlayStateChanged;
@@ -35,47 +43,56 @@ namespace SpotiPeek.App
             get { return _errorStatusText; }
         }
 
-        public string CurrentTrackInfo
+        internal string CurrentTrackInfo
         {
-            get
-            {
-                StatusResponse status;
-                string nowPlayingText = "Unknown";
-                var attemptsLeft = 3;
+            get { return _nowPlayingText; }
+        }
 
-                while (attemptsLeft-- > 0)
+        internal BitmapSource CurrentAlbumImage
+        {
+            get { return _nowPlayingImage; }
+        }
+
+        internal void UpdateStatus()
+        {
+            StatusResponse status;
+            string nowPlayingText = "Unknown";
+            BitmapSource nowPlayingImage = null;
+
+            var attemptsLeft = 3;
+
+            while (attemptsLeft-- > 0)
+            {
+                try
                 {
-                    try
+                    status = _sApi.GetStatus();
+                    nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
+
+                    // Download image file directly
+                    var imageUrl = status.Track.GetAlbumArtUrl(AlbumArtSize.Size160);
+                    nowPlayingImage = GetAlbumArtImage(imageUrl);
+
+                    ReportErrorStateChange(false);
+                    break;
+                }
+                catch (NullReferenceException)
+                {
+                    if (ConnectToLocalSpotifyClient())
                     {
-                        status = _sApi.GetStatus();
-                        nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
-                        ReportErrorStateChange(false);
+                        continue;
+                    }
+                    else
+                    {
+                        ReportErrorStateChange(true, SpotifyLocalAPI.IsSpotifyRunning() 
+                            ? "Error getting Spotify track information." 
+                            : "Spotify is not running.");
                         break;
                     }
-                    catch (NullReferenceException)
-                    {
-                        if (ConnectToLocalSpotifyClient())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            if (!SpotifyLocalAPI.IsSpotifyRunning())
-                            {
-                                ReportErrorStateChange(true, "Spotify is not running.");
-                            }
-                            else
-                            {
-                                ReportErrorStateChange(true, "Error getting Spotify track information.");
-                            }
-
-                            break;
-                        }
-                    }
                 }
-
-                return nowPlayingText;
             }
+
+            _nowPlayingText = nowPlayingText;
+            _nowPlayingImage = nowPlayingImage;
         }
 
         public static bool IsSpotifyInstalled()
@@ -83,6 +100,23 @@ namespace SpotiPeek.App
             string pathToSpotify = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + _spotifyExecutable;
             Debug.WriteLine(pathToSpotify);
             return File.Exists(pathToSpotify);
+        }
+
+        private BitmapSource GetAlbumArtImage(string url)
+        {
+            using (var wc = new WebClient())
+            {
+                using (var mutex = new Mutex(false, MutexName))
+                {
+                    if (mutex.WaitOne(MutexTimeout))
+                    {
+                        wc.DownloadFile(url, "image.jpg");
+                    }
+                }
+            }
+
+            var fullPathToImage = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "image.jpg");
+            return new BitmapImage(new Uri(fullPathToImage, UriKind.Absolute));
         }
 
         private bool ConnectToLocalSpotifyClient()

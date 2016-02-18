@@ -12,26 +12,26 @@ namespace SpotiPeek.App
 {
     public partial class App : Application
     {
-        private AppSettingsController _settingsMgr;
+        private AppSettingsController _settings;
                 
         public App()
         {
-            _settingsMgr = new AppSettingsController();
-            _settingsMgr.Load();
+            _settings = new AppSettingsController();
+            _settings.Load();
         }
 
-        public AppSettingsModel Settings { get { return _settingsMgr.Settings; } }
+        public AppSettingsController Settings { get { return _settings; } }
 
         public void SaveSettings()
         {
-            _settingsMgr.Save();
+            _settings.Save();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
 
-            _settingsMgr.Save();
+            _settings.Save();
         }
     }
 }

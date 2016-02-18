@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SpotiPeek.App
 {
@@ -42,7 +45,6 @@ namespace SpotiPeek.App
             ContextMenuExit.Click += ContextMenuExit_Click;
             ContextMenuRefresh.Click += ContextMenuRefresh_Click;
             MouseLeftButtonDown += OnAfterDragWindow;
-            MainPane.MouseUp += OnAnyMouseButtonUp;
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
@@ -66,8 +68,8 @@ namespace SpotiPeek.App
 
         private void RestoreStartupWindowLocation()
         {
-            Left = Math.Abs(_app.Settings.WindowLocationLeft);
-            Top = Math.Abs(_app.Settings.WindowLocationTop);
+            Left = Math.Abs(_app.Settings.Data.WindowLocationLeft);
+            Top = Math.Abs(_app.Settings.Data.WindowLocationTop);
         }
 
         private void OnAfterDragWindow(object sender, MouseButtonEventArgs e)
@@ -78,9 +80,9 @@ namespace SpotiPeek.App
 
         private void SaveStateToSettings()
         {
-            _app.Settings.WindowLocationLeft = (int)Math.Abs(Left);
-            _app.Settings.WindowLocationTop = (int)Math.Abs(Top);
-            _app.SaveSettings();
+            _app.Settings.Data.WindowLocationLeft = (int)Math.Abs(Left);
+            _app.Settings.Data.WindowLocationTop = (int)Math.Abs(Top);
+            _app.Settings.Save();
         }
 
         private void OnErrorStateChanged(object sender, EventArgs e)
@@ -98,16 +100,13 @@ namespace SpotiPeek.App
             RefreshContent();
         }
 
-        private void OnAnyMouseButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            RefreshContent();
-        }
-
         private void RefreshContent()
         {
             Dispatcher.Invoke(() =>
             {
+                _sm.UpdateStatus();
                 TrackInfoLabel.Content = _sm.CurrentTrackInfo;
+                //AlbumArtImage.Source = _sm.CurrentAlbumImage;
             });
         }
 
