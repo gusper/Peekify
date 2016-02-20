@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -106,7 +107,7 @@ namespace SpotiPeek.App
             {
                 _sm.UpdateStatus();
                 TrackInfoLabel.Content = _sm.CurrentTrackInfo;
-                //AlbumArtImage.Source = _sm.CurrentAlbumImage;
+                AlbumArtImage.Source = _sm.CurrentAlbumImage;
             });
         }
 

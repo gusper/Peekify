@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SpotiPeek.App
 {
@@ -16,8 +17,6 @@ namespace SpotiPeek.App
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
-        private const string MutexName = "com.zinkolabs.spotipeek";
-        private const int MutexTimeout = 750;
 
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
@@ -92,31 +91,24 @@ namespace SpotiPeek.App
             }
 
             _nowPlayingText = nowPlayingText;
-            _nowPlayingImage = nowPlayingImage;
+            _nowPlayingImage = (BitmapImage)nowPlayingImage.GetCurrentValueAsFrozen();
         }
 
         public static bool IsSpotifyInstalled()
         {
             string pathToSpotify = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + _spotifyExecutable;
-            Debug.WriteLine(pathToSpotify);
             return File.Exists(pathToSpotify);
         }
 
-        private BitmapSource GetAlbumArtImage(string url)
+        private BitmapImage GetAlbumArtImage(string url)
         {
             using (var wc = new WebClient())
             {
-                using (var mutex = new Mutex(false, MutexName))
-                {
-                    if (mutex.WaitOne(MutexTimeout))
-                    {
-                        wc.DownloadFile(url, "image.jpg");
-                    }
-                }
+                wc.DownloadFile(url, "image.jpg");
             }
 
-            var fullPathToImage = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "image.jpg");
-            return new BitmapImage(new Uri(fullPathToImage, UriKind.Absolute));
+            var imageFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "image.jpg");
+            return new BitmapImage(new Uri(imageFilePath));
         }
 
         private bool ConnectToLocalSpotifyClient()
