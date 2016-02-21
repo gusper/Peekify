@@ -93,7 +93,10 @@ namespace SpotiPeek.App
             _nowPlayingText = nowPlayingText;
 
             // Had to use frozen or it would lead to a 'file in use' exception on next download
-            _nowPlayingImage = (BitmapImage)nowPlayingImage.GetCurrentValueAsFrozen();
+            if (nowPlayingImage != null)
+            {
+                _nowPlayingImage = (BitmapImage)nowPlayingImage.GetCurrentValueAsFrozen();
+            }
         }
 
         internal static bool IsSpotifyInstalled()
@@ -104,9 +107,16 @@ namespace SpotiPeek.App
 
         private BitmapImage GetAlbumArtImage(string url)
         {
-            using (var wc = new WebClient())
+            try
             {
-                wc.DownloadFile(url, "image.jpg");
+                using (var wc = new WebClient())
+                {
+                    wc.DownloadFile(url, "image.jpg");
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
 
             var imageFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "image.jpg");
