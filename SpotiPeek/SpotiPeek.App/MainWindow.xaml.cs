@@ -33,6 +33,8 @@ namespace SpotiPeek.App
             CheckAndRespondToErrorState();
             RefreshContent();
             this.Opacity = 0.4;
+            _albumArtTimer.Interval = 5000;
+            _albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
             ImageStackPanel.Visibility = Visibility.Collapsed;
         }
 
@@ -41,7 +43,7 @@ namespace SpotiPeek.App
             if (!SpotifyManager.IsSpotifyInstalled())
             {
                 MessageBox.Show("Spotify must be installed to run SpotiPeek", "Can't find Spotify");
-                Environment.Exit(-1);
+                _app.Shutdown(-1);
             }
         }
 
@@ -63,7 +65,7 @@ namespace SpotiPeek.App
 
         private void ContextMenuExit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown(0);
+            _app.Shutdown(0);
         }
 
         private void RestoreStateFromSettings()
@@ -125,14 +127,11 @@ namespace SpotiPeek.App
                 ImageStackPanel.Visibility = Visibility.Visible;
             });
 
-            _albumArtTimer.Interval = 5000;
             _albumArtTimer.Stop();
-            _albumArtTimer.Elapsed += _albumArtTimer_Elapsed;
-            
             _albumArtTimer.Start();
         }
 
-        private void _albumArtTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void AlbumArtTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {

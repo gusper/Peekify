@@ -23,21 +23,21 @@ namespace SpotiPeek.App
         private string _nowPlayingText = string.Empty;
         private BitmapSource _nowPlayingImage = null;
 
-        public event EventHandler TrackChanged;
-        public event EventHandler PlayStateChanged;
-        public event EventHandler ErrorStateChanged;
+        internal event EventHandler TrackChanged;
+        internal event EventHandler PlayStateChanged;
+        internal event EventHandler ErrorStateChanged;
 
-        public SpotifyManager()
+        internal SpotifyManager()
         {
             ConnectToLocalSpotifyClient();
         }
 
-        public bool IsInErrorState
+        internal bool IsInErrorState
         {
             get { return _errorState; }
         }
 
-        public string ErrorStatusText
+        internal string ErrorStatusText
         {
             get { return _errorStatusText; }
         }
@@ -55,7 +55,7 @@ namespace SpotiPeek.App
         internal void UpdateStatus()
         {
             StatusResponse status;
-            string nowPlayingText = "Unknown";
+            var nowPlayingText = "Unknown";
             BitmapSource nowPlayingImage = null;
 
             var attemptsLeft = 3;
@@ -68,7 +68,7 @@ namespace SpotiPeek.App
                     nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
 
                     // Download image file directly
-                    var imageUrl = status.Track.GetAlbumArtUrl(AlbumArtSize.Size160);
+                    var imageUrl = status.Track.GetAlbumArtUrl(AlbumArtSize.Size320);
                     nowPlayingImage = GetAlbumArtImage(imageUrl);
 
                     ReportErrorStateChange(false);
@@ -91,10 +91,12 @@ namespace SpotiPeek.App
             }
 
             _nowPlayingText = nowPlayingText;
+
+            // Had to use frozen or it would lead to a 'file in use' exception on next download
             _nowPlayingImage = (BitmapImage)nowPlayingImage.GetCurrentValueAsFrozen();
         }
 
-        public static bool IsSpotifyInstalled()
+        internal static bool IsSpotifyInstalled()
         {
             string pathToSpotify = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + _spotifyExecutable;
             return File.Exists(pathToSpotify);
