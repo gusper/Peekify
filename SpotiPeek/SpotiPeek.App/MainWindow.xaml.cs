@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -12,6 +13,7 @@ namespace SpotiPeek.App
     {
         private SpotifyManager _sm;
         private App _app = (App)Application.Current;
+        private Timer _albumArtTimer = new Timer();
 
         public MainWindow()
         {
@@ -30,6 +32,8 @@ namespace SpotiPeek.App
             HookUpEventHandlers();
             CheckAndRespondToErrorState();
             RefreshContent();
+            this.Opacity = 0.4;
+            ImageStackPanel.Visibility = Visibility.Collapsed;
         }
 
         private void EnsureSpotifyIsInstalled()
@@ -94,11 +98,13 @@ namespace SpotiPeek.App
         private void OnPlayStateChanged(object sender, EventArgs e)
         {
             RefreshContent();
+            ShowAlbumArt();
         }
 
         private void OnTrackChanged(object sender, EventArgs e)
         {
             RefreshContent();
+            ShowAlbumArt();
         }
 
         private void RefreshContent()
@@ -109,6 +115,32 @@ namespace SpotiPeek.App
                 TrackInfoLabel.Content = _sm.CurrentTrackInfo;
                 AlbumArtImage.Source = _sm.CurrentAlbumImage;
             });
+        }
+
+        private void ShowAlbumArt()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                this.Opacity = 1.0;
+                ImageStackPanel.Visibility = Visibility.Visible;
+            });
+
+            _albumArtTimer.Interval = 5000;
+            _albumArtTimer.Stop();
+            _albumArtTimer.Elapsed += _albumArtTimer_Elapsed;
+            
+            _albumArtTimer.Start();
+        }
+
+        private void _albumArtTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                this.Opacity = 0.4;
+                ImageStackPanel.Visibility = Visibility.Collapsed;
+            });
+
+            _albumArtTimer.Stop();
         }
 
         private void CheckAndRespondToErrorState()
