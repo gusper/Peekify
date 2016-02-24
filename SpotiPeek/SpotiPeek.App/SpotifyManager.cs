@@ -66,10 +66,7 @@ namespace SpotiPeek.App
                 {
                     status = _sApi.GetStatus();
                     nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
-
-                    // Download image file directly
-                    var imageUrl = status.Track.GetAlbumArtUrl(AlbumArtSize.Size320);
-                    nowPlayingImage = GetAlbumArtImage(imageUrl);
+                    nowPlayingImage = GetAlbumArtImage(status.Track);
 
                     ReportErrorStateChange(false);
                     break;
@@ -105,8 +102,10 @@ namespace SpotiPeek.App
             return File.Exists(pathToSpotify);
         }
 
-        private BitmapImage GetAlbumArtImage(string url)
+        private BitmapImage GetAlbumArtImage(Track track)
         {
+            var url = track.GetAlbumArtUrl(AlbumArtSize.Size320);
+            
             try
             {
                 using (var wc = new WebClient())
@@ -119,7 +118,8 @@ namespace SpotiPeek.App
                 return null;
             }
 
-            var imageFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "image.jpg");
+            var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var imageFilePath = Path.Combine(appDirectory, "image.jpg");
             return new BitmapImage(new Uri(imageFilePath));
         }
 
