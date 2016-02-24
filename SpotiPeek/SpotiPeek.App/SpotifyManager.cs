@@ -105,12 +105,15 @@ namespace SpotiPeek.App
         private BitmapImage GetAlbumArtImage(Track track)
         {
             var url = track.GetAlbumArtUrl(AlbumArtSize.Size320);
-            
+            var slashIndex = url.LastIndexOf('/') + 1;
+            var albumUrlId = url.Substring(slashIndex, url.Length - slashIndex);
+            var fileName = albumUrlId + ".jpg";
+
             try
             {
                 using (var wc = new WebClient())
                 {
-                    wc.DownloadFile(url, "image.jpg");
+                    wc.DownloadFile(url, fileName);
                 }
             }
             catch (Exception)
@@ -119,7 +122,7 @@ namespace SpotiPeek.App
             }
 
             var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var imageFilePath = Path.Combine(appDirectory, "image.jpg");
+            var imageFilePath = Path.Combine(appDirectory, fileName);
             return new BitmapImage(new Uri(imageFilePath));
         }
 
