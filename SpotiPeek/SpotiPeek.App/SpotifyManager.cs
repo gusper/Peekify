@@ -105,22 +105,24 @@ namespace SpotiPeek.App
         {
             var albumArtSize = AlbumArtSize.Size320;
             var url = track.GetAlbumArtUrl(albumArtSize);
-            string albumUrlId = GetAlbumIdFromUrl(url);
+            var albumUrlId = GetAlbumIdFromUrl(url);
 
-            string imageFilePath = GetPathToFileInCache(albumArtSize, albumUrlId);
+            var imageFilePath = GetPathToFileInCache(albumArtSize, albumUrlId);
 
-            try
+            if (!File.Exists(imageFilePath))
             {
-                using (var wc = new WebClient())
+                try
                 {
-                    wc.DownloadFile(url, imageFilePath);
+                    using (var wc = new WebClient())
+                    {
+                        wc.DownloadFile(url, imageFilePath);
+                    }
+                }
+                catch (Exception)
+                {
+                    return null;
                 }
             }
-            catch (Exception)
-            {
-                return null;
-            }
-
 
             // Had to use frozen or it would lead to a 'file in use' exception on next download
             return (BitmapImage)new BitmapImage(new Uri(imageFilePath)).GetCurrentValueAsFrozen();
