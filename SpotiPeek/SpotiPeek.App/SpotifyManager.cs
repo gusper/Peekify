@@ -105,15 +105,15 @@ namespace SpotiPeek.App
         {
             var albumArtSize = AlbumArtSize.Size320;
             var url = track.GetAlbumArtUrl(albumArtSize);
-            var slashIndex = url.LastIndexOf('/') + 1;
-            var albumUrlId = url.Substring(slashIndex, url.Length - slashIndex);
-            var fileName = albumUrlId + "-" + GetSizeAsString(albumArtSize) + ".jpg";
+            string albumUrlId = GetAlbumIdFromUrl(url);
+
+            string imageFilePath = GetPathToFileInCache(albumArtSize, albumUrlId);
 
             try
             {
                 using (var wc = new WebClient())
                 {
-                    wc.DownloadFile(url, fileName);
+                    wc.DownloadFile(url, imageFilePath);
                 }
             }
             catch (Exception)
@@ -121,11 +121,29 @@ namespace SpotiPeek.App
                 return null;
             }
 
-            var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var imageFilePath = Path.Combine(appDirectory, fileName);
 
             // Had to use frozen or it would lead to a 'file in use' exception on next download
             return (BitmapImage)new BitmapImage(new Uri(imageFilePath)).GetCurrentValueAsFrozen();
+        }
+
+        private string GetAlbumIdFromUrl(string url)
+        {
+            var slashIndex = url.LastIndexOf('/') + 1;
+            var albumUrlId = url.Substring(slashIndex, url.Length - slashIndex);
+            return albumUrlId;
+        }
+
+        private string GetPathToFileInCache(AlbumArtSize albumArtSize, string albumUrlId)
+        {
+            var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var cacheDirectory = Path.Combine(appDirectory, "cache");
+            if (!Directory.Exists(cacheDirectory))
+            {
+                Directory.CreateDirectory(cacheDirectory);
+            }
+            var fileName = albumUrlId + "-" + GetSizeAsString(albumArtSize) + ".jpg";
+            var imageFilePath = Path.Combine(cacheDirectory, fileName);
+            return imageFilePath;
         }
 
         private string GetSizeAsString(AlbumArtSize albumArtSize)
