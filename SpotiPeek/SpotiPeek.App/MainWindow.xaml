@@ -16,7 +16,7 @@
       <RowDefinition/>
     </Grid.RowDefinitions>
     <StackPanel Grid.Row="0" x:Name="StatusStackPanel" Orientation="Horizontal">
-      <Label x:Name="StatusInfoLabel" 
+      <Label x:Name="StatusInfoLabel" HorizontalContentAlignment="Center"
              Padding="5,5" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10" />
     </StackPanel>
     <Label Grid.Row="0" 
