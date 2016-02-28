@@ -92,7 +92,7 @@ namespace SpotiPeek.App
             // Had to use frozen or it would lead to a 'file in use' exception on next download
             if (nowPlayingImage != null)
             {
-                _nowPlayingImage = (BitmapImage)nowPlayingImage.GetCurrentValueAsFrozen();
+                _nowPlayingImage = (BitmapImage)nowPlayingImage;
             }
         }
 
@@ -124,7 +124,7 @@ namespace SpotiPeek.App
 
             var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var imageFilePath = Path.Combine(appDirectory, fileName);
-            return new BitmapImage(new Uri(imageFilePath));
+            return (BitmapImage)new BitmapImage(new Uri(imageFilePath)).GetCurrentValueAsFrozen();
         }
 
         private string GetSizeAsString(AlbumArtSize albumArtSize)
