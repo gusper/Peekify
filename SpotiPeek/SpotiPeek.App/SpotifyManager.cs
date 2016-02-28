@@ -104,10 +104,11 @@ namespace SpotiPeek.App
 
         private BitmapImage GetAlbumArtImage(Track track)
         {
-            var url = track.GetAlbumArtUrl(AlbumArtSize.Size320);
+            var albumArtSize = AlbumArtSize.Size320;
+            var url = track.GetAlbumArtUrl(albumArtSize);
             var slashIndex = url.LastIndexOf('/') + 1;
             var albumUrlId = url.Substring(slashIndex, url.Length - slashIndex);
-            var fileName = albumUrlId + ".jpg";
+            var fileName = albumUrlId + "-" + GetSizeAsString(albumArtSize) + ".jpg";
 
             try
             {
@@ -124,6 +125,18 @@ namespace SpotiPeek.App
             var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var imageFilePath = Path.Combine(appDirectory, fileName);
             return new BitmapImage(new Uri(imageFilePath));
+        }
+
+        private string GetSizeAsString(AlbumArtSize albumArtSize)
+        {
+            switch (albumArtSize)
+            {
+                case AlbumArtSize.Size160: return "160";
+                case AlbumArtSize.Size320: return "320";
+                case AlbumArtSize.Size640: return "640";
+            }
+
+            return "0";
         }
 
         private bool ConnectToLocalSpotifyClient()
