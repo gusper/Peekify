@@ -146,16 +146,22 @@ namespace SpotiPeek.App
         {
             if (_sm.IsInErrorState)
             {
-                // Show error information
-                StatusStackPanel.Visibility = Visibility.Visible;
-                TrackInfoLabel.Visibility = Visibility.Collapsed;
-                StatusInfoLabel.Content = _sm.ErrorStatusText;
+                Dispatcher.Invoke(() =>
+                {
+                    // Show error information
+                    StatusStackPanel.Visibility = Visibility.Visible;
+                    TrackInfoLabel.Visibility = Visibility.Collapsed;
+                    StatusInfoLabel.Content = _sm.ErrorStatusText;
+                });
             }
             else
             {
-                // Show track information
-                StatusStackPanel.Visibility = Visibility.Collapsed;
-                TrackInfoLabel.Visibility = Visibility.Visible;
+                Dispatcher.Invoke(() =>
+                {
+                    // Show track information
+                    StatusStackPanel.Visibility = Visibility.Collapsed;
+                    TrackInfoLabel.Visibility = Visibility.Visible;
+                });
             }
         }
     }

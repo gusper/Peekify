@@ -9,6 +9,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SpotiPeek.App
 {
@@ -17,12 +18,14 @@ namespace SpotiPeek.App
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
+        private const int _pollInterval = 5 * 60 * 1000;
 
+        private Timer _processWatcherTimer;
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
         private string _nowPlayingText = string.Empty;
         private BitmapSource _nowPlayingImage = null;
-
+        
         internal event EventHandler TrackChanged;
         internal event EventHandler PlayStateChanged;
         internal event EventHandler ErrorStateChanged;
@@ -107,6 +110,12 @@ namespace SpotiPeek.App
             var url = track.GetAlbumArtUrl(albumArtSize);
             var albumUrlId = GetAlbumIdFromUrl(url);
 
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(albumUrlId))
+            {
+                Debug.WriteLine("Album art url or urlid were empty strings.");
+                return null;
+            }
+
             var imageFilePath = GetPathToFileInCache(albumArtSize, albumUrlId);
 
             if (!File.Exists(imageFilePath))
@@ -118,8 +127,9 @@ namespace SpotiPeek.App
                         wc.DownloadFile(url, imageFilePath);
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.WriteLine("Exception swallowed: " + e.Message);
                     return null;
                 }
             }
@@ -167,6 +177,7 @@ namespace SpotiPeek.App
             if (!SpotifyLocalAPI.IsSpotifyRunning())
             {
                 ReportErrorStateChange(true, "Spotify is not running");
+                StartSpotifyProcessWatcher();
                 return false;
             }
 
@@ -191,6 +202,26 @@ namespace SpotiPeek.App
             }
 
             return true;
+        }
+
+        private void StartSpotifyProcessWatcher()
+        {
+            _processWatcherTimer = new Timer(CheckForSpotifyProcess, null, _pollInterval, _pollInterval);
+        }
+
+        private void CheckForSpotifyProcess(object state)
+        {
+            var procs = Process.GetProcessesByName("spotify");
+            if (procs.Length > 0)
+            {
+                Debug.WriteLine("Found spotify.exe");
+                _processWatcherTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                UpdateStatus();
+            }
+            else
+            {
+                Debug.WriteLine("Spotify.exe not running");
+            }
         }
 
         private void ReportErrorStateChange(bool isInErrorState, string errorText = "")
