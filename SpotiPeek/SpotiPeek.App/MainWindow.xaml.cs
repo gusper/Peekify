@@ -149,7 +149,7 @@ namespace SpotiPeek.App
                 Dispatcher.Invoke(() =>
                 {
                     // Show error information
-                    StatusStackPanel.Visibility = Visibility.Visible;
+                    StatusInfoLabel.Visibility = Visibility.Visible;
                     TrackInfoLabel.Visibility = Visibility.Collapsed;
                     StatusInfoLabel.Content = _sm.ErrorStatusText;
                 });
@@ -159,7 +159,7 @@ namespace SpotiPeek.App
                 Dispatcher.Invoke(() =>
                 {
                     // Show track information
-                    StatusStackPanel.Visibility = Visibility.Collapsed;
+                    StatusInfoLabel.Visibility = Visibility.Collapsed;
                     TrackInfoLabel.Visibility = Visibility.Visible;
                 });
             }
