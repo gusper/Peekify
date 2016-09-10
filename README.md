@@ -7,4 +7,4 @@ This app is most useful for anyone who often plays playlists of music they're no
 
 Credits:
 * Uses the [SpotifyAPI-NET](https://github.com/JohnnyCrazy/SpotifyAPI-NET) library to interact with the local Spotify application.
-* Icons come from [here](http://www.iconarchive.com/show/stark-icons-by-fruityth1ng/Spotify-GB-icon.html) and was created by [Herman van Boeijen](http://www.iconarchive.com/artist/fruityth1ng.html). 
+* Icon comes from [here](http://www.iconarchive.com/show/stark-icons-by-fruityth1ng/Spotify-GB-icon.html) and was created by [Herman van Boeijen](http://www.iconarchive.com/artist/fruityth1ng.html). 
