@@ -236,7 +236,7 @@ namespace SpotiPeek.App
 
         private void OnPlayStateChanged(object sender, PlayStateEventArgs e)
         {
-            if (PlayStateChanged != null)
+            if (PlayStateChanged != null && e.Playing)
             {
                 PlayStateChanged.Invoke(this, new EventArgs());
             }
