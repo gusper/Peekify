@@ -68,7 +68,7 @@ namespace SpotiPeek.App
                 try
                 {
                     status = _sApi.GetStatus();
-                    nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
+                    nowPlayingText = string.Format($"'{status.Track.TrackResource.Name}' by {status.Track.ArtistResource.Name}");
                     nowPlayingImage = GetAlbumArtImage(status.Track);
 
                     ReportErrorStateChange(false);
@@ -83,8 +83,7 @@ namespace SpotiPeek.App
                     else
                     {
                         ReportErrorStateChange(true, SpotifyLocalAPI.IsSpotifyRunning() 
-                            ? "Error getting Spotify track information." 
-                            : "Spotify is not running.");
+                            ? $"Error: {this.ErrorStatusText}" : "Spotify is not running.");
                         break;
                     }
                 }
