@@ -1,16 +1,9 @@
-﻿using SpotiPeek.App.ApplicationSettings;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Navigation;
+﻿using System.Windows;
+using SpotiPeek.App.ApplicationSettings;
 
 namespace SpotiPeek.App
 {
-    public partial class App : Application
+	public partial class App : Application
     {
         private AppSettingsController _settings;
                 

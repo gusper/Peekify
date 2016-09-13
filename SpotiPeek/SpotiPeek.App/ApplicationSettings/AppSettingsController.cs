@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpotiPeek.App.ApplicationSettings
 {
-    public class AppSettingsController
+	public class AppSettingsController
     {
         private AppSettingsModel _data;
         private AppSettingsStore<AppSettingsModel> _settingsStore;
