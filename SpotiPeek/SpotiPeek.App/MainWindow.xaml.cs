@@ -45,24 +45,11 @@ namespace SpotiPeek.App
 			_albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
 			ImageStackPanel.Visibility = Visibility.Collapsed;
 
-			ContextMenuExit.Click += ContextMenuExit_Click;
-			ContextMenuRefresh.Click += ContextMenuRefresh_Click;
+			ContextMenuExit.Click += OnContextMenuExit;
+			ContextMenuRefresh.Click += OnContextMenuRefresh;
 			MouseLeftButtonDown += OnAfterDragWindow;
-			MouseLeftButtonUp += MainWindow_MouseLeftButtonUp;
-			MouseDoubleClick += MainWindow_MouseDoubleClick;
-		}
-
-		private void MainWindow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			_sm.TogglePlayPauseState();
-		}
-
-		private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-		{
-			if (_isAlbumArtVisible)
-			{
-				HideAlbumArt();
-			}
+			MouseLeftButtonUp += OnSingleClick;
+			MouseDoubleClick += OnDoubleClick;
 		}
 
 		private void EnsureSpotifyIsInstalled()
@@ -74,12 +61,12 @@ namespace SpotiPeek.App
             }
         }
 
-        private void ContextMenuRefresh_Click(object sender, RoutedEventArgs e)
+        private void OnContextMenuRefresh(object sender, RoutedEventArgs e)
         {
             RefreshContent();
         }
 
-        private void ContextMenuExit_Click(object sender, RoutedEventArgs e)
+        private void OnContextMenuExit(object sender, RoutedEventArgs e)
         {
             _app.Shutdown(0);
         }
@@ -112,6 +99,19 @@ namespace SpotiPeek.App
         {
             CheckAndRespondToErrorState();
         }
+
+		private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			_sm.TogglePlayPauseState();
+		}
+
+		private void OnSingleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (_isAlbumArtVisible)
+			{
+				HideAlbumArt();
+			}
+		}
 
         private void OnPlayStateChanged(object sender, EventArgs e)
         {
@@ -157,7 +157,7 @@ namespace SpotiPeek.App
 				ImageStackPanel.Visibility = Visibility.Collapsed;
 			});
 
-			if (_albumArtTimer != null && _albumArtTimer.Enabled)
+			if (_albumArtTimer != null)
 			{
 				_albumArtTimer.Stop();
 			}
