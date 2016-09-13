@@ -101,6 +101,18 @@ namespace SpotiPeek.App
             return File.Exists(pathToSpotify);
         }
 
+		internal void TogglePlayPauseState()
+		{
+			if (_sApi.GetStatus().Playing)
+			{
+				_sApi.Pause();
+			}
+			else
+			{
+				_sApi.Play();
+			}
+		}
+
         private BitmapImage GetAlbumArtImage(Track track)
         {
             var albumArtSize = AlbumArtSize.Size320;

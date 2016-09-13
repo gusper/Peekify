@@ -49,6 +49,12 @@ namespace SpotiPeek.App
 			ContextMenuRefresh.Click += ContextMenuRefresh_Click;
 			MouseLeftButtonDown += OnAfterDragWindow;
 			MouseLeftButtonUp += MainWindow_MouseLeftButtonUp;
+			MouseDoubleClick += MainWindow_MouseDoubleClick;
+		}
+
+		private void MainWindow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			_sm.TogglePlayPauseState();
 		}
 
 		private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
