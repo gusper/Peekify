@@ -68,7 +68,7 @@ namespace SpotiPeek.App
                 try
                 {
                     status = _sApi.GetStatus();
-                    nowPlayingText = string.Format($"'{status.Track.TrackResource.Name}' by {status.Track.ArtistResource.Name}");
+                    nowPlayingText = $"'{status.Track.TrackResource.Name}' by {status.Track.ArtistResource.Name}";
                     nowPlayingImage = GetAlbumArtImage(status.Track);
 
                     ReportErrorStateChange(false);
