@@ -7,28 +7,30 @@
         SizeToContent="Height"
         Background="#222" AllowsTransparency="True">
 
-  <Grid x:Name="MainPane" Margin="0,-5">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition/>
-    </Grid.RowDefinitions>
-    <StackPanel Grid.Row="0" x:Name="StatusStackPanel" Orientation="Horizontal">
-      <Label x:Name="StatusInfoLabel" 
+  <Border BorderBrush="#888" BorderThickness="0.5" Margin="0,-1,0,0">
+    <Grid x:Name="MainPane" Margin="0,-5">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <StackPanel Grid.Row="0" x:Name="StatusStackPanel" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Label x:Name="StatusInfoLabel" 
              Padding="5,5" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10" />
-    </StackPanel>
-    <Label Grid.Row="0" 
+      </StackPanel>
+      <Label Grid.Row="0" 
            x:Name="TrackInfoLabel" 
            Content="'Song name' by Artist Name"
            Padding="5,5" HorizontalContentAlignment="Center"
            Foreground="#fff" FontFamily="Segoe UI" FontSize="10"/>
-    <StackPanel Grid.Row="1" x:Name="ImageStackPanel" Margin="5">
-      <Image x:Name="AlbumArtImage" Margin="0,0,0,5"
+      <StackPanel Grid.Row="1" x:Name="ImageStackPanel" Margin="5">
+        <Image x:Name="AlbumArtImage" Margin="0,0,0,5"
              Width="160" Height="160"/>
-    </StackPanel>
-  </Grid>
+      </StackPanel>
+    </Grid>
+  </Border>
 
   <Window.ContextMenu>
     <ContextMenu>
