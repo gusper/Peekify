@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
+using System.Windows;
+using System.Xml;
 
 namespace SpotiPeek.App.ApplicationSettings
 {
@@ -26,13 +28,21 @@ namespace SpotiPeek.App.ApplicationSettings
         public TData Load()
         {
             TData data = new TData();
+            var filename = GetPathAndFilename();
 
-            if (File.Exists(GetPathAndFilename()))
+            if (File.Exists(filename))
             {
-                using (var fs = new FileStream(GetPathAndFilename(), FileMode.Open, FileAccess.Read))
+                using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
                 {
                     var ser = new DataContractSerializer(typeof(TData));
-                    data = (TData)ser.ReadObject(fs);
+                    try
+                    {
+                        data = (TData)ser.ReadObject(fs);
+                    }
+                    catch (XmlException)
+                    {
+                        data = new TData();
+                    }
                 }
             }
 

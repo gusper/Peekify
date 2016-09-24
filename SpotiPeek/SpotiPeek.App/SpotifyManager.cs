@@ -1,43 +1,44 @@
-﻿using SpotifyAPI.Local;
-using SpotifyAPI.Local.Enums;
-using SpotifyAPI.Local.Models;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Media.Imaging;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using SpotifyAPI.Local;
+using SpotifyAPI.Local.Enums;
+using SpotifyAPI.Local.Models;
 
 namespace SpotiPeek.App
 {
-    class SpotifyManager
+	class SpotifyManager
     {
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
+        private const int _pollInterval = 5 * 60 * 1000;
 
+        private Timer _processWatcherTimer;
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
         private string _nowPlayingText = string.Empty;
         private BitmapSource _nowPlayingImage = null;
+        
+        internal event EventHandler TrackChanged;
+        internal event EventHandler PlayStateChanged;
+        internal event EventHandler ErrorStateChanged;
 
-        public event EventHandler TrackChanged;
-        public event EventHandler PlayStateChanged;
-        public event EventHandler ErrorStateChanged;
-
-        public SpotifyManager()
+        internal SpotifyManager()
         {
             ConnectToLocalSpotifyClient();
         }
 
-        public bool IsInErrorState
+        internal bool IsInErrorState
         {
             get { return _errorState; }
         }
 
-        public string ErrorStatusText
+        internal string ErrorStatusText
         {
             get { return _errorStatusText; }
         }
@@ -55,7 +56,7 @@ namespace SpotiPeek.App
         internal void UpdateStatus()
         {
             StatusResponse status;
-            string nowPlayingText = "Unknown";
+            var nowPlayingText = "Unknown";
             BitmapSource nowPlayingImage = null;
 
             var attemptsLeft = 3;
@@ -65,11 +66,8 @@ namespace SpotiPeek.App
                 try
                 {
                     status = _sApi.GetStatus();
-                    nowPlayingText = string.Format("'{0}' by {1}", status.Track.TrackResource.Name, status.Track.ArtistResource.Name);
-
-                    // Download image file directly
-                    var imageUrl = status.Track.GetAlbumArtUrl(AlbumArtSize.Size160);
-                    nowPlayingImage = GetAlbumArtImage(imageUrl);
+                    nowPlayingText = $"'{status.Track.TrackResource.Name}' by {status.Track.ArtistResource.Name}";
+                    nowPlayingImage = GetAlbumArtImage(status.Track);
 
                     ReportErrorStateChange(false);
                     break;
@@ -83,32 +81,102 @@ namespace SpotiPeek.App
                     else
                     {
                         ReportErrorStateChange(true, SpotifyLocalAPI.IsSpotifyRunning() 
-                            ? "Error getting Spotify track information." 
-                            : "Spotify is not running.");
+                            ? $"Error: {this.ErrorStatusText}" : "Spotify is not running.");
                         break;
                     }
                 }
             }
 
             _nowPlayingText = nowPlayingText;
-            _nowPlayingImage = (BitmapImage)nowPlayingImage.GetCurrentValueAsFrozen();
+
+            if (nowPlayingImage != null)
+            {
+                _nowPlayingImage = (BitmapImage)nowPlayingImage;
+            }
         }
 
-        public static bool IsSpotifyInstalled()
+        internal static bool IsSpotifyInstalled()
         {
             string pathToSpotify = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + _spotifyExecutable;
             return File.Exists(pathToSpotify);
         }
 
-        private BitmapImage GetAlbumArtImage(string url)
+		internal void TogglePlayPauseState()
+		{
+			if (_sApi.GetStatus().Playing)
+			{
+				_sApi.Pause();
+			}
+			else
+			{
+				_sApi.Play();
+			}
+		}
+
+        private BitmapImage GetAlbumArtImage(Track track)
         {
-            using (var wc = new WebClient())
+            var albumArtSize = AlbumArtSize.Size320;
+            var url = track.GetAlbumArtUrl(albumArtSize);
+            var albumUrlId = GetAlbumIdFromUrl(url);
+
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(albumUrlId))
             {
-                wc.DownloadFile(url, "image.jpg");
+                Debug.WriteLine("Album art url or urlid were empty strings.");
+                return null;
             }
 
-            var imageFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "image.jpg");
-            return new BitmapImage(new Uri(imageFilePath));
+            var imageFilePath = GetPathToFileInCache(albumArtSize, albumUrlId);
+
+            if (!File.Exists(imageFilePath))
+            {
+                try
+                {
+                    using (var wc = new WebClient())
+                    {
+                        wc.DownloadFile(url, imageFilePath);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Exception swallowed: " + e.Message);
+                    return null;
+                }
+            }
+
+            // Had to use frozen or it would lead to a 'file in use' exception on next download
+            return (BitmapImage)new BitmapImage(new Uri(imageFilePath)).GetCurrentValueAsFrozen();
+        }
+
+        private string GetAlbumIdFromUrl(string url)
+        {
+            var slashIndex = url.LastIndexOf('/') + 1;
+            var albumUrlId = url.Substring(slashIndex, url.Length - slashIndex);
+            return albumUrlId;
+        }
+
+        private string GetPathToFileInCache(AlbumArtSize albumArtSize, string albumUrlId)
+        {
+            var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var cacheDirectory = Path.Combine(appDirectory, "cache");
+            if (!Directory.Exists(cacheDirectory))
+            {
+                Directory.CreateDirectory(cacheDirectory);
+            }
+            var fileName = albumUrlId + "-" + GetSizeAsString(albumArtSize) + ".jpg";
+            var imageFilePath = Path.Combine(cacheDirectory, fileName);
+            return imageFilePath;
+        }
+
+        private string GetSizeAsString(AlbumArtSize albumArtSize)
+        {
+            switch (albumArtSize)
+            {
+                case AlbumArtSize.Size160: return "160";
+                case AlbumArtSize.Size320: return "320";
+                case AlbumArtSize.Size640: return "640";
+            }
+
+            return "0";
         }
 
         private bool ConnectToLocalSpotifyClient()
@@ -118,6 +186,7 @@ namespace SpotiPeek.App
             if (!SpotifyLocalAPI.IsSpotifyRunning())
             {
                 ReportErrorStateChange(true, "Spotify is not running");
+                StartSpotifyProcessWatcher();
                 return false;
             }
 
@@ -144,6 +213,26 @@ namespace SpotiPeek.App
             return true;
         }
 
+        private void StartSpotifyProcessWatcher()
+        {
+            _processWatcherTimer = new Timer(CheckForSpotifyProcess, null, _pollInterval, _pollInterval);
+        }
+
+        private void CheckForSpotifyProcess(object state)
+        {
+            var procs = Process.GetProcessesByName("spotify");
+            if (procs.Length > 0)
+            {
+                Debug.WriteLine("Found spotify.exe");
+                _processWatcherTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                UpdateStatus();
+            }
+            else
+            {
+                Debug.WriteLine("Spotify.exe not running");
+            }
+        }
+
         private void ReportErrorStateChange(bool isInErrorState, string errorText = "")
         {
             _errorStatusText = errorText;
@@ -157,7 +246,7 @@ namespace SpotiPeek.App
 
         private void OnPlayStateChanged(object sender, PlayStateEventArgs e)
         {
-            if (PlayStateChanged != null)
+            if (PlayStateChanged != null && e.Playing)
             {
                 PlayStateChanged.Invoke(this, new EventArgs());
             }

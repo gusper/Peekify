@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpotiPeek.App.ApplicationSettings
 {
-    public class AppSettingsController
+	public class AppSettingsController
     {
         private AppSettingsModel _data;
         private AppSettingsStore<AppSettingsModel> _settingsStore;
@@ -18,7 +14,7 @@ namespace SpotiPeek.App.ApplicationSettings
             _data = new AppSettingsModel();
             var directoryName = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             var machineName = Environment.MachineName.ToLower();
-            var fileName = "settings." + machineName + ".xml";
+            var fileName = $"settings.{machineName}.xml";
             _settingsStore = new AppSettingsStore<AppSettingsModel>(directoryName, fileName);
         }
 

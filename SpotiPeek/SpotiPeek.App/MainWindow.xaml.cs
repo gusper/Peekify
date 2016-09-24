@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SpotiPeek.App
 {
-    public partial class MainWindow : Window
+	public partial class MainWindow : Window
     {
         private SpotifyManager _sm;
         private App _app = (App)Application.Current;
         private Timer _albumArtTimer = new Timer();
+		private bool _isAlbumArtVisible = false;
 
         public MainWindow()
         {
@@ -25,45 +22,53 @@ namespace SpotiPeek.App
             base.OnInitialized(e);
 
             RestoreStateFromSettings();
-
-            EnsureSpotifyIsInstalled();
-
-            _sm = new SpotifyManager();
-            HookUpEventHandlers();
-            CheckAndRespondToErrorState();
-            RefreshContent();
-            this.Opacity = 0.4;
-            ImageStackPanel.Visibility = Visibility.Collapsed;
+			InitSpotifyConnection();
+			InitUI();
         }
 
-        private void EnsureSpotifyIsInstalled()
+		private void InitSpotifyConnection()
+		{
+			EnsureSpotifyIsInstalled();
+			_sm = new SpotifyManager();
+			CheckAndRespondToErrorState();
+			RefreshContent();
+
+			_sm.TrackChanged += OnTrackChanged;
+            _sm.PlayStateChanged += OnPlayStateChanged;
+            _sm.ErrorStateChanged += OnErrorStateChanged;
+		}
+
+		private void InitUI()
+		{
+			this.Opacity = 0.4;
+			_albumArtTimer.Interval = 5000;
+			_albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
+			ImageStackPanel.Visibility = Visibility.Collapsed;
+
+			ContextMenuExit.Click += OnContextMenuExit;
+			ContextMenuRefresh.Click += OnContextMenuRefresh;
+			MouseLeftButtonDown += OnAfterDragWindow;
+			MouseLeftButtonUp += OnSingleClick;
+			MouseDoubleClick += OnDoubleClick;
+		}
+
+		private void EnsureSpotifyIsInstalled()
         {
             if (!SpotifyManager.IsSpotifyInstalled())
             {
                 MessageBox.Show("Spotify must be installed to run SpotiPeek", "Can't find Spotify");
-                Environment.Exit(-1);
+                _app.Shutdown(-1);
             }
         }
 
-        private void HookUpEventHandlers()
-        {
-            ContextMenuExit.Click += ContextMenuExit_Click;
-            ContextMenuRefresh.Click += ContextMenuRefresh_Click;
-            MouseLeftButtonDown += OnAfterDragWindow;
-
-            _sm.TrackChanged += OnTrackChanged;
-            _sm.PlayStateChanged += OnPlayStateChanged;
-            _sm.ErrorStateChanged += OnErrorStateChanged;
-        }
-
-        private void ContextMenuRefresh_Click(object sender, RoutedEventArgs e)
+        private void OnContextMenuRefresh(object sender, RoutedEventArgs e)
         {
             RefreshContent();
         }
 
-        private void ContextMenuExit_Click(object sender, RoutedEventArgs e)
+        private void OnContextMenuExit(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown(0);
+            _app.Shutdown(0);
         }
 
         private void RestoreStateFromSettings()
@@ -95,6 +100,19 @@ namespace SpotiPeek.App
             CheckAndRespondToErrorState();
         }
 
+		private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			_sm.TogglePlayPauseState();
+		}
+
+		private void OnSingleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (_isAlbumArtVisible)
+			{
+				HideAlbumArt();
+			}
+		}
+
         private void OnPlayStateChanged(object sender, EventArgs e)
         {
             RefreshContent();
@@ -125,38 +143,53 @@ namespace SpotiPeek.App
                 ImageStackPanel.Visibility = Visibility.Visible;
             });
 
-            _albumArtTimer.Interval = 5000;
             _albumArtTimer.Stop();
-            _albumArtTimer.Elapsed += _albumArtTimer_Elapsed;
-            
             _albumArtTimer.Start();
-        }
 
-        private void _albumArtTimer_Elapsed(object sender, ElapsedEventArgs e)
+			_isAlbumArtVisible = true;
+		}
+
+		private void HideAlbumArt()
+		{
+			Dispatcher.Invoke(() =>
+			{
+				this.Opacity = 0.4;
+				ImageStackPanel.Visibility = Visibility.Collapsed;
+			});
+
+			if (_albumArtTimer != null)
+			{
+				_albumArtTimer.Stop();
+			}
+
+			_isAlbumArtVisible = false;
+		}
+
+        private void AlbumArtTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
-            {
-                this.Opacity = 0.4;
-                ImageStackPanel.Visibility = Visibility.Collapsed;
-            });
+			HideAlbumArt();
+		}
 
-            _albumArtTimer.Stop();
-        }
-
-        private void CheckAndRespondToErrorState()
+		private void CheckAndRespondToErrorState()
         {
             if (_sm.IsInErrorState)
             {
-                // Show error information
-                StatusStackPanel.Visibility = Visibility.Visible;
-                TrackInfoLabel.Visibility = Visibility.Collapsed;
-                StatusInfoLabel.Content = _sm.ErrorStatusText;
+                Dispatcher.Invoke(() =>
+                {
+                    // Show error information
+                    StatusInfoLabel.Visibility = Visibility.Visible;
+                    TrackInfoLabel.Visibility = Visibility.Collapsed;
+                    StatusInfoLabel.Content = _sm.ErrorStatusText;
+                });
             }
             else
             {
-                // Show track information
-                StatusStackPanel.Visibility = Visibility.Collapsed;
-                TrackInfoLabel.Visibility = Visibility.Visible;
+                Dispatcher.Invoke(() =>
+                {
+                    // Show track information
+                    StatusInfoLabel.Visibility = Visibility.Collapsed;
+                    TrackInfoLabel.Visibility = Visibility.Visible;
+                });
             }
         }
     }
