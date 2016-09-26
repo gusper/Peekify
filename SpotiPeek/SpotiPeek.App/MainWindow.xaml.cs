@@ -40,8 +40,8 @@ namespace SpotiPeek.App
 
 		private void InitUI()
 		{
-			this.Opacity = 0.4;
-			_albumArtTimer.Interval = 5000;
+			Opacity = 0.4;
+            _albumArtTimer.Interval = 5000;
 			_albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
 			ImageStackPanel.Visibility = Visibility.Collapsed;
 
