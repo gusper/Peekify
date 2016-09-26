@@ -16,14 +16,12 @@
         <RowDefinition/>
       </Grid.RowDefinitions>
       <StackPanel Grid.Row="0" x:Name="StatusStackPanel" Orientation="Horizontal" HorizontalAlignment="Center">
-        <Label x:Name="StatusInfoLabel" 
-             Padding="5,5" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10" />
+        <Label x:Name="StatusInfoLabel" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10"/>
       </StackPanel>
       <Label Grid.Row="0" 
-           x:Name="TrackInfoLabel" 
-           Content="'Song name' by Artist Name"
-           Padding="5,5" HorizontalContentAlignment="Center"
-           Foreground="#fff" FontFamily="Segoe UI" FontSize="10"/>
+             x:Name="TrackInfoLabel" Content="'Song name' by Artist Name"
+             HorizontalContentAlignment="Center" Foreground="#fff" 
+             FontFamily="Segoe UI" FontSize="10"/>
       <StackPanel Grid.Row="1" x:Name="ImageStackPanel" Margin="5" Orientation="Horizontal">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -33,9 +31,9 @@
           <Image x:Name="AlbumArtImage" Grid.Column="0" 
                  Margin="0,0,0,5" Width="80" Height="80"/>
           <StackPanel Grid.Column="1">
-            <Label x:Name="AlbumArtSongLabel" Content="Song name" Foreground="#fff"/>
-            <Label x:Name="AlbumArtArtistLabel" Content="Artist name" Foreground="#fff"/>
-            <Label x:Name="AlbumArtAlbumLabel" Content="Album name" Foreground="#fff"/>
+            <Label x:Name="AlbumArtSongLabel" Content="Song name" Foreground="#ddd"/>
+            <Label x:Name="AlbumArtArtistLabel" Content="Artist name" Foreground="#ddd"/>
+            <Label x:Name="AlbumArtAlbumLabel" Content="Album name" Foreground="#ddd"/>
           </StackPanel>
         </Grid>
       </StackPanel>
