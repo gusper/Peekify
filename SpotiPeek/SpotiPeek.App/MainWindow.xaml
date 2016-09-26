@@ -24,9 +24,20 @@
            Content="'Song name' by Artist Name"
            Padding="5,5" HorizontalContentAlignment="Center"
            Foreground="#fff" FontFamily="Segoe UI" FontSize="10"/>
-      <StackPanel Grid.Row="1" x:Name="ImageStackPanel" Margin="5">
-        <Image x:Name="AlbumArtImage" Margin="0,0,0,5"
-             Width="160" Height="160"/>
+      <StackPanel Grid.Row="1" x:Name="ImageStackPanel" Margin="5" Orientation="Horizontal">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+          <Image x:Name="AlbumArtImage" Grid.Column="0" 
+                 Margin="0,0,0,5" Width="80" Height="80"/>
+          <StackPanel Grid.Column="1">
+            <Label x:Name="AlbumArtSongLabel" Content="Song name" Foreground="#fff"/>
+            <Label x:Name="AlbumArtArtistLabel" Content="Artist name" Foreground="#fff"/>
+            <Label x:Name="AlbumArtAlbumLabel" Content="Album name" Foreground="#fff"/>
+          </StackPanel>
+        </Grid>
       </StackPanel>
     </Grid>
   </Border>
