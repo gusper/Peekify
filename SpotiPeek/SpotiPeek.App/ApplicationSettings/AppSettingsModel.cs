@@ -9,6 +9,6 @@ namespace SpotiPeek.App.ApplicationSettings
         public int WindowLocationLeft { get; set; }
 
         [DataMember]
-        public int WindowLocationTop { get; set; }
+        public int WindowLocationTop { get; set; } // No longer used, but keeping just in case
     }
 }

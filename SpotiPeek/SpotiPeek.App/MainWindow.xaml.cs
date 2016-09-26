@@ -79,19 +79,19 @@ namespace SpotiPeek.App
         private void RestoreStartupWindowLocation()
         {
             Left = Math.Abs(_app.Settings.Data.WindowLocationLeft);
-            Top = Math.Abs(_app.Settings.Data.WindowLocationTop);
+            Top = 0;
         }
 
         private void OnAfterDragWindow(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+            Top = 0;
             SaveStateToSettings();
         }
 
         private void SaveStateToSettings()
         {
             _app.Settings.Data.WindowLocationLeft = (int)Math.Abs(Left);
-            _app.Settings.Data.WindowLocationTop = (int)Math.Abs(Top);
             _app.Settings.Save();
         }
 
