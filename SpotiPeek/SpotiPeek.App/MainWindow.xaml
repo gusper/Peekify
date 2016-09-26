@@ -1,7 +1,8 @@
 ﻿<Window x:Class="SpotiPeek.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SpotiPeek" Height="60" Width="300" SizeToContent="Height"
+        Title="SpotiPeek" SizeToContent="WidthAndHeight"
+        Height="60" Width="300" MinWidth="200" MaxWidth="500"
         Background="#222" AllowsTransparency="True"
         ResizeMode="NoResize" ShowInTaskbar="False"
         IsTabStop="False" Topmost="True" WindowStyle="None">
