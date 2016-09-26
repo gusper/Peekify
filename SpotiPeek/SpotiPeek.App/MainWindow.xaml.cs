@@ -143,6 +143,7 @@ namespace SpotiPeek.App
             Dispatcher.Invoke(() =>
             {
                 Opacity = _solidOpacity;
+                SummaryStackPanel.Visibility = Visibility.Collapsed;
                 ImageStackPanel.Visibility = Visibility.Visible;
             });
 
@@ -157,6 +158,7 @@ namespace SpotiPeek.App
 			Dispatcher.Invoke(() =>
 			{
 				Opacity = _transparentOpacity;
+                SummaryStackPanel.Visibility = Visibility.Visible;
 				ImageStackPanel.Visibility = Visibility.Collapsed;
 			});
 
