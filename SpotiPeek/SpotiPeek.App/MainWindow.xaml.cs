@@ -46,7 +46,7 @@ namespace SpotiPeek.App
             Opacity = _transparentOpacity;
             _albumArtTimer.Interval = _albumArtDisplayTime;
 			_albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
-			ImageStackPanel.Visibility = Visibility.Collapsed;
+			DetailsStackPanel.Visibility = Visibility.Collapsed;
 
 			ContextMenuExit.Click += OnContextMenuExit;
 			ContextMenuRefresh.Click += OnContextMenuRefresh;
@@ -144,7 +144,7 @@ namespace SpotiPeek.App
             {
                 Opacity = _solidOpacity;
                 SummaryStackPanel.Visibility = Visibility.Collapsed;
-                ImageStackPanel.Visibility = Visibility.Visible;
+                DetailsStackPanel.Visibility = Visibility.Visible;
             });
 
             _albumArtTimer.Stop();
@@ -159,7 +159,7 @@ namespace SpotiPeek.App
 			{
 				Opacity = _transparentOpacity;
                 SummaryStackPanel.Visibility = Visibility.Visible;
-				ImageStackPanel.Visibility = Visibility.Collapsed;
+				DetailsStackPanel.Visibility = Visibility.Collapsed;
 			});
 
 			if (_albumArtTimer != null)

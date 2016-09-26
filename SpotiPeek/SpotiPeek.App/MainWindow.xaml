@@ -24,7 +24,7 @@
                HorizontalContentAlignment="Center" Foreground="#fff" 
                FontFamily="Segoe UI" FontSize="10"/>
       </StackPanel>
-      <StackPanel x:Name="ImageStackPanel" Grid.Row="1" Margin="10" Orientation="Horizontal">
+      <StackPanel x:Name="DetailsStackPanel" Grid.Row="1" Margin="10" Orientation="Horizontal">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition />
