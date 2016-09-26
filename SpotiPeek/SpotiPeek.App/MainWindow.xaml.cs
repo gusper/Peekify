@@ -11,6 +11,9 @@ namespace SpotiPeek.App
         private App _app = (App)Application.Current;
         private Timer _albumArtTimer = new Timer();
 		private bool _isAlbumArtVisible = false;
+        private const double _transparentOpacity = 0.4;
+        private const double _solidOpacity = 1.0;
+        private const double _albumArtDisplayTime = 5000;
 
         public MainWindow()
         {
@@ -40,8 +43,8 @@ namespace SpotiPeek.App
 
 		private void InitUI()
 		{
-			Opacity = 0.4;
-            _albumArtTimer.Interval = 5000;
+            Opacity = _transparentOpacity;
+            _albumArtTimer.Interval = _albumArtDisplayTime;
 			_albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
 			ImageStackPanel.Visibility = Visibility.Collapsed;
 
@@ -139,7 +142,7 @@ namespace SpotiPeek.App
         {
             Dispatcher.Invoke(() =>
             {
-                this.Opacity = 1.0;
+                Opacity = _solidOpacity;
                 ImageStackPanel.Visibility = Visibility.Visible;
             });
 
@@ -153,7 +156,7 @@ namespace SpotiPeek.App
 		{
 			Dispatcher.Invoke(() =>
 			{
-				this.Opacity = 0.4;
+				Opacity = _transparentOpacity;
 				ImageStackPanel.Visibility = Visibility.Collapsed;
 			});
 
