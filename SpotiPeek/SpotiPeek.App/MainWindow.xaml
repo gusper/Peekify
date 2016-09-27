@@ -18,7 +18,7 @@
       </Grid.RowDefinitions>
       <StackPanel x:Name="SummaryStackPanel" Grid.Row="0" Margin="0,-5">
         <StackPanel x:Name="StatusStackPanel" Orientation="Horizontal" HorizontalAlignment="Center">
-          <Label x:Name="StatusInfoLabel" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10"/>
+          <Label x:Name="StatusInfoLabel" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10" Margin="10,0"/>
         </StackPanel>
         <Label x:Name="TrackInfoLabel" Content="'Song name' by Artist Name"
                HorizontalContentAlignment="Center" Foreground="#fff" 
