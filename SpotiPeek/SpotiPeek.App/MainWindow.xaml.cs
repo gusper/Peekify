@@ -133,7 +133,11 @@ namespace SpotiPeek.App
             Dispatcher.Invoke(() =>
             {
                 _sm.UpdateStatus();
-                TrackInfoLabel.Content = _sm.CurrentTrackInfo;
+                var track = _sm.CurrentTrackInfo;
+                TrackInfoLabel.Content = $"'{ track.SongTitle }' by { track.ArtistName }";
+                AlbumArtSongLabel.Content = track.SongTitle;
+                AlbumArtArtistLabel.Content = track.ArtistName;
+                AlbumArtAlbumLabel.Content = track.AlbumTitle;
                 AlbumArtImage.Source = _sm.CurrentAlbumImage;
             });
         }

@@ -21,7 +21,7 @@ namespace SpotiPeek.App
         private Timer _processWatcherTimer;
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
-        private string _nowPlayingText = string.Empty;
+        private TrackModel _nowPlayingTrack;
         private BitmapSource _nowPlayingImage = null;
         
         internal event EventHandler TrackChanged;
@@ -43,9 +43,9 @@ namespace SpotiPeek.App
             get { return _errorStatusText; }
         }
 
-        internal string CurrentTrackInfo
+        internal TrackModel CurrentTrackInfo
         {
-            get { return _nowPlayingText; }
+            get { return _nowPlayingTrack; }
         }
 
         internal BitmapSource CurrentAlbumImage
@@ -56,7 +56,7 @@ namespace SpotiPeek.App
         internal void UpdateStatus()
         {
             StatusResponse status;
-            var nowPlayingText = "Unknown";
+            var nowPlayingTrack = new TrackModel();
             BitmapSource nowPlayingImage = null;
 
             var attemptsLeft = 3;
@@ -66,7 +66,9 @@ namespace SpotiPeek.App
                 try
                 {
                     status = _sApi.GetStatus();
-                    nowPlayingText = $"'{status.Track.TrackResource.Name}' by {status.Track.ArtistResource.Name}";
+                    nowPlayingTrack.SongTitle = status.Track.TrackResource.Name;
+                    nowPlayingTrack.ArtistName = status.Track.ArtistResource.Name;
+
                     nowPlayingImage = GetAlbumArtImage(status.Track);
 
                     ReportErrorStateChange(false);
@@ -87,7 +89,7 @@ namespace SpotiPeek.App
                 }
             }
 
-            _nowPlayingText = nowPlayingText;
+            _nowPlayingTrack = nowPlayingTrack;
 
             if (nowPlayingImage != null)
             {
