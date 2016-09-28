@@ -27,7 +27,7 @@
       <StackPanel x:Name="DetailsStackPanel" Grid.Row="1" Margin="10" Orientation="Horizontal">
         <Grid>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition/>
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
           <Image x:Name="AlbumArtImage" Grid.Column="0" Width="80" Height="80"/>
