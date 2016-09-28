@@ -31,8 +31,13 @@
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
           <Image x:Name="AlbumArtImage" Grid.Column="0" Width="80" Height="80"/>
-          <StackPanel Grid.Column="1">
-            <Label x:Name="AlbumArtSongLabel" Content="Song name" Foreground="#ddd"/>
+          <StackPanel Grid.Column="1" >
+            <StackPanel.Resources>
+              <Style TargetType="{x:Type Label}">
+                <Setter Property="Padding" Value="10,2"/>
+              </Style>
+            </StackPanel.Resources>
+            <Label x:Name="AlbumArtSongLabel" Content="Song name" Foreground="#ddd" FontWeight="Bold"/>
             <Label x:Name="AlbumArtArtistLabel" Content="Artist name" Foreground="#ddd"/>
             <Label x:Name="AlbumArtAlbumLabel" Content="Album name" Foreground="#ddd"/>
           </StackPanel>
