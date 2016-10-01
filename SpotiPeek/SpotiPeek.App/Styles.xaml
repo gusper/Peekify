@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:SpotiPeek.App">
     
   <!-- Colors -->
@@ -11,5 +12,27 @@
   <SolidColorBrush x:Key="ZBackBrush" Color="{StaticResource ZBackColor}"/>
   <SolidColorBrush x:Key="ZForeBrush" Color="{StaticResource ZForeColor}"/>
   <SolidColorBrush x:Key="ZBorderBrush" Color="{StaticResource ZBorderColor}"/>
+
+  <!-- Font families -->
+  <system:String x:Key="ZNormalFontFamily">Segoe UI</system:String>
+
+  <!-- Text styles -->
+  <Style x:Key="ZNormalText" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{StaticResource ZNormalFontFamily}"/>
+    <Setter Property="FontWeight" Value="Light"/>
+    <Setter Property="FontStretch" Value="Normal"/>
+    <Setter Property="FontStyle" Value="Normal"/>
+    <Setter Property="TextTrimming" Value="WordEllipsis"/>
+    <Setter Property="TextWrapping" Value="NoWrap"/>
+    <Setter Property="Foreground" Value="{StaticResource ZForeBrush}" />
+  </Style>
+  <Style x:Key="ZSmallText" TargetType="TextBlock" BasedOn="{StaticResource ZNormalText}">
+    <Setter Property="FontSize" Value="13"/>
+  </Style>
+
+  <!-- StackPanel styles -->
+  <Style x:Key="ZStackPanelStyle" TargetType="StackPanel">
+    <Setter Property="Background" Value="{StaticResource ZBackBrush}"/>
+  </Style>
 
 </ResourceDictionary>
