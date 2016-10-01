@@ -7,11 +7,8 @@
         ResizeMode="NoResize" ShowInTaskbar="False"
         IsTabStop="False" Topmost="True" WindowStyle="None">
 
-  <Border BorderBrush="#888" BorderThickness="0.5" Margin="0,-1,0,0">
+  <Border BorderBrush="{StaticResource ZBorderBrush}" BorderThickness="0.5" Margin="0,-1,0,0">
     <Grid x:Name="MainPane">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition/>
-      </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
         <RowDefinition/>
         <RowDefinition/>
