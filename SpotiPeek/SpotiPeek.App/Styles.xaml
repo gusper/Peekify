@@ -1,30 +1,32 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:SpotiPeek.App">
     
   <!-- Colors -->
   <Color x:Key="ZBackColor">#222</Color>
-  <Color x:Key="ZForeColor">#ccc</Color>
+  <Color x:Key="ZForeColor">#ddd</Color>
+  <Color x:Key="ZBrightForeColor">#fff</Color>
   <Color x:Key="ZBorderColor">#888</Color>
 
   <!-- Brushes -->
   <SolidColorBrush x:Key="ZBackBrush" Color="{StaticResource ZBackColor}"/>
   <SolidColorBrush x:Key="ZForeBrush" Color="{StaticResource ZForeColor}"/>
+  <SolidColorBrush x:Key="ZBrightForeBrush" Color="{StaticResource ZBrightForeColor}"/>
   <SolidColorBrush x:Key="ZBorderBrush" Color="{StaticResource ZBorderColor}"/>
 
   <!-- Font families -->
-  <system:String x:Key="ZNormalFontFamily">Segoe UI</system:String>
+  <s:String x:Key="ZNormalFontFamily">Segoe UI</s:String>
 
   <!-- Text styles -->
-  <Style x:Key="ZNormalText" TargetType="TextBlock">
-    <Setter Property="FontFamily" Value="{StaticResource ZNormalFontFamily}"/>
+  <Style x:Key="ZNormalText" TargetType="Label">
+    <!--<Setter Property="FontFamily" Value="{StaticResource ZNormalFontFamily}"/>-->
+    <Setter Property="FontFamily" Value="Segoe UI"/>
     <Setter Property="FontWeight" Value="Light"/>
     <Setter Property="FontStretch" Value="Normal"/>
     <Setter Property="FontStyle" Value="Normal"/>
-    <Setter Property="TextTrimming" Value="WordEllipsis"/>
-    <Setter Property="TextWrapping" Value="NoWrap"/>
-    <Setter Property="Foreground" Value="{StaticResource ZForeBrush}" />
+    <Setter Property="FontSize" Value="10"/>
+    <Setter Property="Foreground" Value="{StaticResource ZForeBrush}"/>
   </Style>
   <Style x:Key="ZSmallText" TargetType="TextBlock" BasedOn="{StaticResource ZNormalText}">
     <Setter Property="FontSize" Value="13"/>

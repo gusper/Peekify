@@ -7,7 +7,19 @@
         ResizeMode="NoResize" ShowInTaskbar="False"
         IsTabStop="False" Topmost="True" WindowStyle="None">
 
-  <Border BorderBrush="{StaticResource ZBorderBrush}" BorderThickness="0.5" Margin="0,-1,0,0">
+  <Window.Resources>
+    <Style TargetType="Label" BasedOn="{StaticResource ZNormalText}">
+      <Setter Property="Foreground" Value="{StaticResource ZForeBrush}"/>
+      <Setter Property="Margin" Value="10,0"/>
+    </Style>
+    <Style TargetType="Border">
+      <Setter Property="BorderBrush" Value="{StaticResource ZBorderBrush}"/>
+      <Setter Property="BorderThickness" Value="0.5"/>
+      <Setter Property="Margin" Value="0,-1,0,0"/>
+    </Style>
+  </Window.Resources>
+
+  <Border>
     <Grid x:Name="MainPane">
       <Grid.RowDefinitions>
         <RowDefinition/>
@@ -15,11 +27,10 @@
       </Grid.RowDefinitions>
       <StackPanel x:Name="SummaryStackPanel" Grid.Row="0" Margin="0,-5">
         <StackPanel x:Name="StatusStackPanel" Orientation="Horizontal" HorizontalAlignment="Center">
-          <Label x:Name="StatusInfoLabel" Foreground="{StaticResource ZForeBrush}" FontFamily="Segoe UI" FontSize="10" Margin="10,0"/>
+          <Label x:Name="StatusInfoLabel"/>
         </StackPanel>
         <Label x:Name="TrackInfoLabel" Content="'Song name' by Artist Name"
-               HorizontalContentAlignment="Center" Foreground="#fff" 
-               FontFamily="Segoe UI" FontSize="10" Margin="10,0"/>
+               HorizontalContentAlignment="Center" Foreground="{StaticResource ZBrightForeBrush}"/>
       </StackPanel>
       <StackPanel x:Name="DetailsStackPanel" Grid.Row="1" Margin="10" Orientation="Horizontal">
         <Grid>
@@ -28,15 +39,16 @@
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
           <Image x:Name="AlbumArtImage" Grid.Column="0" Width="80" Height="80"/>
-          <StackPanel Grid.Column="1" >
+          <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <StackPanel.Resources>
-              <Style TargetType="{x:Type Label}">
-                <Setter Property="Padding" Value="10,2"/>
+              <Style TargetType="Label" BasedOn="{StaticResource ZNormalText}">
+                <Setter Property="Padding" Value="10,0,10,3"/>
+                <Setter Property="FontSize" Value="12"/>
               </Style>
             </StackPanel.Resources>
-            <Label x:Name="AlbumArtSongLabel" Content="Song name" Foreground="#ddd" FontWeight="Bold"/>
-            <Label x:Name="AlbumArtArtistLabel" Content="Artist name" Foreground="#ddd"/>
-            <Label x:Name="AlbumArtAlbumLabel" Content="Album name" Foreground="#ddd"/>
+            <Label x:Name="AlbumArtSongLabel" Content="Song name" FontWeight="Bold"/>
+            <Label x:Name="AlbumArtArtistLabel" Content="Artist name"/>
+            <Label x:Name="AlbumArtAlbumLabel" Content="Album name"/>
           </StackPanel>
         </Grid>
       </StackPanel>
