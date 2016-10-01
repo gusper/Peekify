@@ -59,6 +59,7 @@
     <ContextMenu>
       <MenuItem Header="_Refresh" Name="ContextMenuRefresh"/>
       <Separator/>
+      <MenuItem Header="_About Peekify..." Name="ContextMenuAbout"/>
       <MenuItem Header="E_xit" Name="ContextMenuExit"/>
     </ContextMenu>
   </Window.ContextMenu>

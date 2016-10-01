@@ -50,12 +50,13 @@ namespace Peekify.App
 
 			ContextMenuExit.Click += OnContextMenuExit;
 			ContextMenuRefresh.Click += OnContextMenuRefresh;
+            ContextMenuAbout.Click += OnContextMenuAbout;
 			MouseLeftButtonDown += OnAfterDragWindow;
 			MouseLeftButtonUp += OnSingleClick;
 			MouseDoubleClick += OnDoubleClick;
 		}
 
-		private void EnsureSpotifyIsInstalled()
+        private void EnsureSpotifyIsInstalled()
         {
             if (!SpotifyManager.IsSpotifyInstalled())
             {
@@ -67,6 +68,11 @@ namespace Peekify.App
         private void OnContextMenuRefresh(object sender, RoutedEventArgs e)
         {
             RefreshContent();
+        }
+
+        private void OnContextMenuAbout(Object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Peekify\nBy Gus Perez\nZinko Labs LLC\nhttp://zinkolabs.com/peekify", "About...");
         }
 
         private void OnContextMenuExit(object sender, RoutedEventArgs e)
