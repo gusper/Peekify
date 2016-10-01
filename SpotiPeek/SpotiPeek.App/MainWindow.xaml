@@ -38,7 +38,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
-          <Image x:Name="AlbumArtImage" Grid.Column="0" Width="80" Height="80"/>
+          <Image x:Name="AlbumArtImage" Grid.Column="0" Width="100" Height="100"/>
           <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <StackPanel.Resources>
               <Style TargetType="Label" BasedOn="{StaticResource ZNormalText}">
