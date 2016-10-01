@@ -9,7 +9,7 @@ using SpotifyAPI.Local;
 using SpotifyAPI.Local.Enums;
 using SpotifyAPI.Local.Models;
 
-namespace SpotiPeek.App
+namespace Peekify.App
 {
 	class SpotifyManager
     {

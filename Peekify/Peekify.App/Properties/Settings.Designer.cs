@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpotiPeek.App.Properties
+namespace Peekify.App.Properties
 {
 
 

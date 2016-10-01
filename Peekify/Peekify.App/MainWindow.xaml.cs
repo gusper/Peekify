@@ -3,7 +3,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 
-namespace SpotiPeek.App
+namespace Peekify.App
 {
 	public partial class MainWindow : Window
     {
@@ -59,7 +59,7 @@ namespace SpotiPeek.App
         {
             if (!SpotifyManager.IsSpotifyInstalled())
             {
-                MessageBox.Show("Spotify must be installed to run SpotiPeek", "Can't find Spotify");
+                MessageBox.Show("Spotify must be installed to run Peekify", "Can't find Spotify");
                 _app.Shutdown(-1);
             }
         }

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace SpotiPeek.App.ApplicationSettings
+namespace Peekify.App.ApplicationSettings
 {
 	public class AppSettingsController
     {

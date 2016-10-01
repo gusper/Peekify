@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SpotiPeek.App.ApplicationSettings
+namespace Peekify.App.ApplicationSettings
 {
 	[DataContract]
     public class AppSettingsModel

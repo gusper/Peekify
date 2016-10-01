@@ -7,8 +7,8 @@
     <ProjectGuid>{1503B131-4EE9-48D4-865A-90CE8D58CD0F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpotiPeek.App</RootNamespace>
-    <AssemblyName>SpotiPeek</AssemblyName>
+    <RootNamespace>Peekify.App</RootNamespace>
+    <AssemblyName>Peekify</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

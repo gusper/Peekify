@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using System.Xml;
 
-namespace SpotiPeek.App.ApplicationSettings
+namespace Peekify.App.ApplicationSettings
 {
     class AppSettingsStore<TData> where TData : new()
     {

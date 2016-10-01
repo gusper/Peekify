@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C6D586
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotiPeek.App", "SpotiPeek.App\SpotiPeek.App.csproj", "{1503B131-4EE9-48D4-865A-90CE8D58CD0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peekify.App", "Peekify.App\Peekify.App.csproj", "{1503B131-4EE9-48D4-865A-90CE8D58CD0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

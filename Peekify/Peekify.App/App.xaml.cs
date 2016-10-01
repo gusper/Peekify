@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using SpotiPeek.App.ApplicationSettings;
+using Peekify.App.ApplicationSettings;
 
-namespace SpotiPeek.App
+namespace Peekify.App
 {
 	public partial class App : Application
     {
