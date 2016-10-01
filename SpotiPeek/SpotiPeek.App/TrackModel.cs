@@ -11,6 +11,5 @@ namespace SpotiPeek.App
         public string SongTitle;
         public string ArtistName;
         public string AlbumTitle;
-        public string AlbumYear;
     }
 }
