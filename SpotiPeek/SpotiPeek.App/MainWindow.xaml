@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="SpotiPeek" SizeToContent="WidthAndHeight"
         Height="60" Width="300" MinWidth="200" MaxWidth="500"
-        Background="#222" AllowsTransparency="True"
+        Background="{StaticResource ZBackBrush}" AllowsTransparency="True"
         ResizeMode="NoResize" ShowInTaskbar="False"
         IsTabStop="False" Topmost="True" WindowStyle="None">
 
@@ -15,7 +15,7 @@
       </Grid.RowDefinitions>
       <StackPanel x:Name="SummaryStackPanel" Grid.Row="0" Margin="0,-5">
         <StackPanel x:Name="StatusStackPanel" Orientation="Horizontal" HorizontalAlignment="Center">
-          <Label x:Name="StatusInfoLabel" Foreground="LightPink" FontFamily="Segoe UI" FontSize="10" Margin="10,0"/>
+          <Label x:Name="StatusInfoLabel" Foreground="{StaticResource ZForeBrush}" FontFamily="Segoe UI" FontSize="10" Margin="10,0"/>
         </StackPanel>
         <Label x:Name="TrackInfoLabel" Content="'Song name' by Artist Name"
                HorizontalContentAlignment="Center" Foreground="#fff" 
