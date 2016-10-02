@@ -3,7 +3,7 @@ using Peekify.App.ApplicationSettings;
 
 namespace Peekify.App
 {
-	public partial class App : Application
+    public partial class App : Application
     {
         private AppSettingsController _settings;
                 
