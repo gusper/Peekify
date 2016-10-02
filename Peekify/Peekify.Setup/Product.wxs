@@ -23,10 +23,10 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Id="ApplicationFiles" Guid="990FEA0F-A16B-443A-AB5B-1A699CDE62AC">
-        <File Id="PeekifyExecutable" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName)"/>
-        <File Id="PeekifyExecutableConfig" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName).config"/>
-        <File Id="SpotifyApiLibrary" Source="$(var.Peekify.App.TargetDir)\spotifyapi.dll"/>
-        <File Id="NewtonSoftJsonLibrary" Source="$(var.Peekify.App.TargetDir)\newtonsoft.json.dll"/>
+        <File Id="PeekifyExe" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName)"/>
+        <File Id="PeekifyExeConfig" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName).config"/>
+        <File Id="SpotifyApiDll" Source="$(var.Peekify.App.TargetDir)\spotifyapi.dll"/>
+        <File Id="NewtonSoftJsonDll" Source="$(var.Peekify.App.TargetDir)\newtonsoft.json.dll"/>
       </Component>
     </ComponentGroup>
   </Fragment>

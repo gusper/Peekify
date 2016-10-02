@@ -5,12 +5,12 @@ using System.Windows.Input;
 
 namespace Peekify.App
 {
-	public partial class MainWindow : Window
+    public partial class MainWindow : Window
     {
         private SpotifyManager _sm;
         private App _app = (App)Application.Current;
         private Timer _albumArtTimer = new Timer();
-		private bool _isAlbumArtVisible = false;
+        private bool _isAlbumArtVisible = false;
         private const double _transparentOpacity = 0.4;
         private const double _solidOpacity = 1.0;
         private const double _albumArtDisplayTime = 5000;
@@ -25,36 +25,36 @@ namespace Peekify.App
             base.OnInitialized(e);
 
             RestoreStateFromSettings();
-			InitSpotifyConnection();
-			InitUI();
+            InitSpotifyConnection();
+            InitUI();
         }
 
-		private void InitSpotifyConnection()
-		{
-			EnsureSpotifyIsInstalled();
-			_sm = new SpotifyManager();
-			CheckAndRespondToErrorState();
-			RefreshContent();
+        private void InitSpotifyConnection()
+        {
+            EnsureSpotifyIsInstalled();
+            _sm = new SpotifyManager();
+            CheckAndRespondToErrorState();
+            RefreshContent();
 
-			_sm.TrackChanged += OnTrackChanged;
+            _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
             _sm.ErrorStateChanged += OnErrorStateChanged;
-		}
+        }
 
-		private void InitUI()
-		{
+        private void InitUI()
+        {
             Opacity = _transparentOpacity;
             _albumArtTimer.Interval = _albumArtDisplayTime;
-			_albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
-			DetailsStackPanel.Visibility = Visibility.Collapsed;
+            _albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
+            DetailsStackPanel.Visibility = Visibility.Collapsed;
 
-			ContextMenuExit.Click += OnContextMenuExit;
-			ContextMenuRefresh.Click += OnContextMenuRefresh;
+            ContextMenuExit.Click += OnContextMenuExit;
+            ContextMenuRefresh.Click += OnContextMenuRefresh;
             ContextMenuAbout.Click += OnContextMenuAbout;
-			MouseLeftButtonDown += OnAfterDragWindow;
-			MouseLeftButtonUp += OnSingleClick;
-			MouseDoubleClick += OnDoubleClick;
-		}
+            MouseLeftButtonDown += OnAfterDragWindow;
+            MouseLeftButtonUp += OnSingleClick;
+            MouseDoubleClick += OnDoubleClick;
+        }
 
         private void EnsureSpotifyIsInstalled()
         {
@@ -109,18 +109,18 @@ namespace Peekify.App
             CheckAndRespondToErrorState();
         }
 
-		private void OnDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			_sm.TogglePlayPauseState();
-		}
+        private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            _sm.TogglePlayPauseState();
+        }
 
-		private void OnSingleClick(object sender, MouseButtonEventArgs e)
-		{
-			if (_isAlbumArtVisible)
-			{
-				HideAlbumArt();
-			}
-		}
+        private void OnSingleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (_isAlbumArtVisible)
+            {
+                HideAlbumArt();
+            }
+        }
 
         private void OnPlayStateChanged(object sender, EventArgs e)
         {
@@ -160,32 +160,32 @@ namespace Peekify.App
             _albumArtTimer.Stop();
             _albumArtTimer.Start();
 
-			_isAlbumArtVisible = true;
-		}
+            _isAlbumArtVisible = true;
+        }
 
-		private void HideAlbumArt()
-		{
-			Dispatcher.Invoke(() =>
-			{
-				Opacity = _transparentOpacity;
+        private void HideAlbumArt()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                Opacity = _transparentOpacity;
                 SummaryStackPanel.Visibility = Visibility.Visible;
-				DetailsStackPanel.Visibility = Visibility.Collapsed;
-			});
+                DetailsStackPanel.Visibility = Visibility.Collapsed;
+            });
 
-			if (_albumArtTimer != null)
-			{
-				_albumArtTimer.Stop();
-			}
+            if (_albumArtTimer != null)
+            {
+                _albumArtTimer.Stop();
+            }
 
-			_isAlbumArtVisible = false;
-		}
+            _isAlbumArtVisible = false;
+        }
 
         private void AlbumArtTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-			HideAlbumArt();
-		}
+            HideAlbumArt();
+        }
 
-		private void CheckAndRespondToErrorState()
+        private void CheckAndRespondToErrorState()
         {
             if (_sm.IsInErrorState)
             {

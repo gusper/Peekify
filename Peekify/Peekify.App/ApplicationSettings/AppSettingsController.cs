@@ -2,9 +2,11 @@
 using System.IO;
 using System.Reflection;
 
+using Peekify.App;
+
 namespace Peekify.App.ApplicationSettings
 {
-	public class AppSettingsController
+    public class AppSettingsController
     {
         private AppSettingsModel _data;
         private AppSettingsStore<AppSettingsModel> _settingsStore;
@@ -12,10 +14,9 @@ namespace Peekify.App.ApplicationSettings
         public AppSettingsController()
         {
             _data = new AppSettingsModel();
-            var directoryName = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
-            var machineName = Environment.MachineName.ToLower();
-            var fileName = $"settings.{machineName}.xml";
-            _settingsStore = new AppSettingsStore<AppSettingsModel>(directoryName, fileName);
+            var fileName = "settings.xml";
+            var path = Utils.GetAppDataPath();
+            _settingsStore = new AppSettingsStore<AppSettingsModel>(path, fileName);
         }
 
         public AppSettingsModel Data
@@ -32,5 +33,6 @@ namespace Peekify.App.ApplicationSettings
         {
             _data = _settingsStore.Load();
         }
+
     }
 }

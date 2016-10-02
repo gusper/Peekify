@@ -74,6 +74,7 @@
     <Compile Include="ApplicationSettings\AppSettingsStore.cs" />
     <Compile Include="SpotifyManager.cs" />
     <Compile Include="TrackModel.cs" />
+    <Compile Include="Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

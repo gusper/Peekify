@@ -11,7 +11,7 @@ using SpotifyAPI.Local.Models;
 
 namespace Peekify.App
 {
-	class SpotifyManager
+    class SpotifyManager
     {
         private SpotifyLocalAPI _sApi;
 
@@ -104,17 +104,17 @@ namespace Peekify.App
             return File.Exists(pathToSpotify);
         }
 
-		internal void TogglePlayPauseState()
-		{
-			if (_sApi.GetStatus().Playing)
-			{
-				_sApi.Pause();
-			}
-			else
-			{
-				_sApi.Play();
-			}
-		}
+        internal void TogglePlayPauseState()
+        {
+            if (_sApi.GetStatus().Playing)
+            {
+                _sApi.Pause();
+            }
+            else
+            {
+                _sApi.Play();
+            }
+        }
 
         private BitmapImage GetAlbumArtImage(Track track)
         {
@@ -159,8 +159,8 @@ namespace Peekify.App
 
         private string GetPathToFileInCache(AlbumArtSize albumArtSize, string albumUrlId)
         {
-            var appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var cacheDirectory = Path.Combine(appDirectory, "cache");
+            var appDataDir = Utils.GetAppDataPath();
+            var cacheDirectory = Path.Combine(appDataDir, "cache");
             if (!Directory.Exists(cacheDirectory))
             {
                 Directory.CreateDirectory(cacheDirectory);
