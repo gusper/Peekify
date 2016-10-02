@@ -1,34 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  
-  <Product Id="*" Name="Peekify" Language="1033" Version="1.0.0.0" Manufacturer="Zinko Labs LLC" UpgradeCode="E6BAA9E1-F399-4048-B558-84D13A31BA5E">
+
+  <Product Id="*" Name="Peekify" Language="1033" Version="1.0.0.0" Manufacturer="Zinko Labs LLC" 
+           UpgradeCode="E6BAA9E1-F399-4048-B558-84D13A31BA5E">
+    
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes"/>
 
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLDIR" Name="Peekify">
+          <Component Id="AppFiles" Guid="990FEA0F-A16B-443A-AB5B-1A699CDE62AC">
+            <File Id="PeekifyExe" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName)"/>
+            <File Id="PeekifyExeConfig" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName).config"/>
+            <File Id="SpotifyApiDll" Source="$(var.Peekify.App.TargetDir)\spotifyapi.dll"/>
+            <File Id="NewtonSoftJsonDll" Source="$(var.Peekify.App.TargetDir)\newtonsoft.json.dll"/>
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProgramMenuSubFolder" Name="Peekify">
+          <Component Id="AppShortcuts" Guid="E094C9BF-BAAA-4B74-B94A-4AC0AA5CA8B6">
+            <Shortcut Id="AppShortcut" Name="Peekify" Description="Peekify by Zinko Labs" 
+                      Target="[INSTALLDIR]peekify.exe" WorkingDirectory="INSTALLDIR"/>
+            <RegistryValue Root="HKCU" Key="Software\Zinko Labs\Peekify"
+                            Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+            <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>
+      
+    </Directory>
+
     <Feature Id="ProductFeature" Title="Peekify" Level="1">
-      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="AppFiles"/>
+      <ComponentRef Id="AppShortcuts"/>
     </Feature>
+    
   </Product>
 
-  <Fragment>
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="Peekify" />
-      </Directory>
-    </Directory>
-  </Fragment>
-
-  <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <Component Id="ApplicationFiles" Guid="990FEA0F-A16B-443A-AB5B-1A699CDE62AC">
-        <File Id="PeekifyExe" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName)"/>
-        <File Id="PeekifyExeConfig" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName).config"/>
-        <File Id="SpotifyApiDll" Source="$(var.Peekify.App.TargetDir)\spotifyapi.dll"/>
-        <File Id="NewtonSoftJsonDll" Source="$(var.Peekify.App.TargetDir)\newtonsoft.json.dll"/>
-      </Component>
-    </ComponentGroup>
-  </Fragment>
-  
 </Wix>
