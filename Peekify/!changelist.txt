@@ -1,0 +1,10 @@
+
+
+0.8.1
+- Added a setting to control transparent mode
+
+
+0.8.0 (10/3/2016)
+- First version with an installer (MSI)
+- Settings and album art cache now saved in user's appdata directory
+- Improved notification UI on play state changes and new tracks
