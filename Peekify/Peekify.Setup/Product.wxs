@@ -11,18 +11,18 @@
 
   <Product Id="*" Name="$(var.ProductName)" Language="1033" Manufacturer="$(var.ProductCompany)"
            Version="$(var.ProductVersion)" UpgradeCode="$(var.ProductUpgradeCode)">
-    
+
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
-    
+
     <Upgrade Id="$(var.ProductUpgradeCode)">
       <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes"
                       Property="NEWERVERSIONDETECTED"/>
       <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no"
                       Property="OLDERVERSIONBEINGUPGRADED"/>
     </Upgrade>
-    
+
     <Condition Message="A newer version of $(var.ProductName) is already installed.">NOT NEWERVERSIONDETECTED</Condition>
-    
+
     <MediaTemplate EmbedCab="yes"/>
 
     <Icon Id="ProductIcon" SourceFile="$(var.Peekify.App.ProjectDir)\appicon.ico"/>
@@ -33,7 +33,6 @@
     <Property Id="ARPNOMODIFY" Value="1"/>
     <Property Id="ARPCONTACT" Value="$(var.ProductSupportEmail)"/>
     <Property Id="COMPANYNAME" Value="$(var.ProductCompany)"/>
-    
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       
@@ -70,7 +69,7 @@
       <ComponentRef Id="AppFiles"/>
       <ComponentRef Id="AppShortcuts"/>
     </Feature>
-    
+
   </Product>
 
 </Wix>
