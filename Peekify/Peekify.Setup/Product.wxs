@@ -22,8 +22,8 @@
     
     <MediaTemplate EmbedCab="yes"/>
 
-    <!--<Icon Id="ProductIcon" SourceFile="example.ico"/>
-    <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>-->
+    <Icon Id="ProductIcon" SourceFile="$(var.Peekify.App.ProjectDir)\appicon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
     <Property Id="ARPHELPLINK" Value="http://www.zinkolabs.com/peekify"/>
     <Property Id="ARPURLINFOABOUT" Value="http://www.zinkolabs.com/peekify"/>
     <Property Id="ARPNOREPAIR" Value="1"/>
