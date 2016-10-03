@@ -13,7 +13,7 @@
       <Setter Property="Margin" Value="10,0"/>
     </Style>
     <Style TargetType="Border">
-      <Setter Property="BorderBrush" Value="{StaticResource ZBorderBrush}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource ZBorderBrush}"/> 
       <Setter Property="BorderThickness" Value="0.5"/>
       <Setter Property="Margin" Value="0,-1,0,0"/>
     </Style>
