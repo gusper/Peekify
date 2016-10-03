@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -41,17 +42,43 @@ namespace Peekify.App
 
         private void InitUI()
         {
+            InitializeContextMenus();
             _albumArtTimer.Interval = _albumArtDisplayTime;
             _albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
             DetailsStackPanel.Visibility = Visibility.Collapsed;
 
             ContextMenuRefresh.Click += OnContextMenuRefresh;
             ContextMenuTransparent.Click += OnContextMenuTransparent;
+            ContextMenuAutoStart.Click += OnContextMenuAutoStart;
             ContextMenuAbout.Click += OnContextMenuAbout;
             ContextMenuExit.Click += OnContextMenuExit;
             MouseLeftButtonDown += OnAfterDragWindow;
             MouseLeftButtonUp += OnSingleClick;
             MouseDoubleClick += OnDoubleClick;
+        }
+
+        private void InitializeContextMenus()
+        {
+            ContextMenuAutoStart.IsChecked = IsAutoRunEnabled();
+            ContextMenuTransparent.IsChecked = _app.Settings.Data.TransparentMode;
+        }
+
+        private void OnContextMenuAutoStart(Object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private bool IsAutoRunEnabled()
+        {
+            var isAutoStartEnabled = false;
+            var autoRunKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", false);
+
+            if (autoRunKey.GetValue("Peekify") != null)
+            {
+                isAutoStartEnabled = true;
+            }
+
+            return isAutoStartEnabled;
         }
 
         private void OnContextMenuTransparent(Object sender, RoutedEventArgs e)
@@ -95,7 +122,6 @@ namespace Peekify.App
         private void RestoreTransparencyState()
         {
             SetTransparencyState(_app.Settings.Data.TransparentMode);
-            ContextMenuTransparent.IsChecked = _app.Settings.Data.TransparentMode;
         }
 
         private void RestoreStartupWindowLocation()

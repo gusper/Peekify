@@ -60,6 +60,7 @@
       <MenuItem Header="_Refresh" Name="ContextMenuRefresh"/>
       <MenuItem Header="_Settings">
         <MenuItem Header="_Transparency enabled" Name="ContextMenuTransparent"/>
+        <MenuItem Header="_Launch when Windows starts" Name="ContextMenuAutoStart"/> 
       </MenuItem>
       <Separator/>
       <MenuItem Header="_About Peekify..." Name="ContextMenuAbout"/>
