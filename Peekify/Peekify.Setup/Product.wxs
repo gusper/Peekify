@@ -9,7 +9,7 @@
   <Product Id="*" Name="$(var.ProductName)" Language="1033" Manufacturer="Zinko Labs LLC"
            Version="$(var.ProductVersion)" UpgradeCode="$(var.ProductUpgradeCode)">
     
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
     
     <Upgrade Id="$(var.ProductUpgradeCode)">
       <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes"
@@ -28,6 +28,9 @@
     <Property Id="ARPURLINFOABOUT" Value="http://www.zinkolabs.com/peekify"/>
     <Property Id="ARPNOREPAIR" Value="1"/>
     <Property Id="ARPNOMODIFY" Value="1"/>
+    <Property Id="ARPCONTACT" Value="support@zinkolabs.com"/>
+    <Property Id="COMPANYNAME" Value="Zinko Labs LLC"/>
+    
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       
