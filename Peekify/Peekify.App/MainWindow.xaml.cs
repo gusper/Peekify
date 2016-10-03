@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Reflection;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -65,7 +66,18 @@ namespace Peekify.App
 
         private void OnContextMenuAutoStart(Object sender, RoutedEventArgs e)
         {
+            SetAutoRunState(!ContextMenuAutoStart.IsChecked);
+        }
 
+        private void SetAutoRunState(bool enabled)
+        {
+            var currentState = IsAutoRunEnabled();
+
+            if (currentState == enabled)
+                return;
+
+            var autoRunKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+            autoRunKey.SetValue("Peekify", Environment.CommandLine);
         }
 
         private bool IsAutoRunEnabled()
