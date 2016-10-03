@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?define ProductName = "Peekify" ?>
+<?define ProductName = "Peekify"?>
+<?define ProductVersion = "0.8.0.1"?>
+<?define ProductUpgradeCode = "E6BAA9E1-F399-4048-B558-84D13A31BA5E"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-  <Product Id="*" Name="Peekify" Language="1033" Version="1.0.0.0" Manufacturer="Zinko Labs LLC" 
-           UpgradeCode="E6BAA9E1-F399-4048-B558-84D13A31BA5E">
+  <Product Id="*" Name="Peekify" Language="1033" Version="$(var.ProductVersion)" Manufacturer="Zinko Labs LLC" 
+           UpgradeCode="$(var.ProductUpgradeCode)">
     
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
-
-    <MajorUpgrade DowngradeErrorMessage="A newer version of $(var.ProductName) is already installed." />
+    
+    <Upgrade Id="$(var.ProductUpgradeCode)">
+      <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
+      <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no"
+                      Property="OLDERVERSIONBEINGUPGRADED"/>
+    </Upgrade>
+    <Condition Message="A newer version of $(var.ProductName) is already installed.">NOT NEWERVERSIONDETECTED</Condition>
+    
     <MediaTemplate EmbedCab="yes"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -31,13 +39,17 @@
             <Shortcut Id="AppShortcut" Name="$(var.ProductName)" Description="$(var.ProductName) by Zinko Labs" 
                       Target="[INSTALLDIR]peekify.exe" WorkingDirectory="INSTALLDIR"/>
             <RegistryValue Root="HKCU" Key="Software\Zinko Labs\$(var.ProductName)"
-                            Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+                           Name="installed" Type="integer" Value="1" KeyPath="yes"/>
             <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
           </Component>
         </Directory>
       </Directory>
       
     </Directory>
+
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallValidate"/>
+    </InstallExecuteSequence>
 
     <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1">
       <ComponentRef Id="AppFiles"/>
