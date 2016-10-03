@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25802.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C6D5865B-FF76-4506-8E15-02E448D66F4D}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peekify.App", "Peekify.App\Peekify.App.csproj", "{1503B131-4EE9-48D4-865A-90CE8D58CD0F}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Peekify.Setup", "Peekify.Setup\Peekify.Setup.wixproj", "{D32D0EAA-D79F-46D7-AF75-DC564AA196EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6BF04EA2-C85D-42F5-B560-5AB17D3D0A5B}"
+	ProjectSection(SolutionItems) = preProject
+		!changelist.txt = !changelist.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
