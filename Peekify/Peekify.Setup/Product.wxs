@@ -22,6 +22,13 @@
     
     <MediaTemplate EmbedCab="yes"/>
 
+    <!--<Icon Id="ProductIcon" SourceFile="example.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>-->
+    <Property Id="ARPHELPLINK" Value="http://www.zinkolabs.com/peekify"/>
+    <Property Id="ARPURLINFOABOUT" Value="http://www.zinkolabs.com/peekify"/>
+    <Property Id="ARPNOREPAIR" Value="1"/>
+    <Property Id="ARPNOMODIFY" Value="1"/>
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       
       <Directory Id="ProgramFilesFolder">
