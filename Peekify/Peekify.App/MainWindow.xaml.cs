@@ -11,8 +11,6 @@ namespace Peekify.App
         private App _app = (App)Application.Current;
         private Timer _albumArtTimer = new Timer();
         private bool _isAlbumArtVisible = false;
-        private const double _transparentOpacity = 0.4;
-        private const double _solidOpacity = 1.0;
         private const double _albumArtDisplayTime = 5000;
 
         public MainWindow()
@@ -43,17 +41,25 @@ namespace Peekify.App
 
         private void InitUI()
         {
-            Opacity = _transparentOpacity;
             _albumArtTimer.Interval = _albumArtDisplayTime;
             _albumArtTimer.Elapsed += AlbumArtTimer_Elapsed;
             DetailsStackPanel.Visibility = Visibility.Collapsed;
 
-            ContextMenuExit.Click += OnContextMenuExit;
             ContextMenuRefresh.Click += OnContextMenuRefresh;
+            ContextMenuTransparent.Click += OnContextMenuTransparent;
             ContextMenuAbout.Click += OnContextMenuAbout;
+            ContextMenuExit.Click += OnContextMenuExit;
             MouseLeftButtonDown += OnAfterDragWindow;
             MouseLeftButtonUp += OnSingleClick;
             MouseDoubleClick += OnDoubleClick;
+        }
+
+        private void OnContextMenuTransparent(Object sender, RoutedEventArgs e)
+        {
+            _app.Settings.Data.TransparentMode = !_app.Settings.Data.TransparentMode;
+            _app.Settings.Save();
+            ContextMenuTransparent.IsChecked = _app.Settings.Data.TransparentMode;
+            SetTransparencyState(_app.Settings.Data.TransparentMode);
         }
 
         private void EnsureSpotifyIsInstalled()
@@ -83,6 +89,13 @@ namespace Peekify.App
         private void RestoreStateFromSettings()
         {
             RestoreStartupWindowLocation();
+            RestoreTransparencyState();
+        }
+
+        private void RestoreTransparencyState()
+        {
+            SetTransparencyState(_app.Settings.Data.TransparentMode);
+            ContextMenuTransparent.IsChecked = _app.Settings.Data.TransparentMode;
         }
 
         private void RestoreStartupWindowLocation()
@@ -152,7 +165,7 @@ namespace Peekify.App
         {
             Dispatcher.Invoke(() =>
             {
-                Opacity = _solidOpacity;
+                SetTransparencyState(false);
                 SummaryStackPanel.Visibility = Visibility.Collapsed;
                 DetailsStackPanel.Visibility = Visibility.Visible;
             });
@@ -167,7 +180,7 @@ namespace Peekify.App
         {
             Dispatcher.Invoke(() =>
             {
-                Opacity = _transparentOpacity;
+                SetTransparencyState(true);
                 SummaryStackPanel.Visibility = Visibility.Visible;
                 DetailsStackPanel.Visibility = Visibility.Collapsed;
             });
@@ -178,6 +191,21 @@ namespace Peekify.App
             }
 
             _isAlbumArtVisible = false;
+        }
+
+        private void SetTransparencyState(bool isTransparent)
+        {
+            const double transparent = 0.4;
+            const double opaque = 1.0;
+
+            if (_app.Settings.Data.TransparentMode && isTransparent)
+            {
+                Opacity = transparent;
+            }
+            else
+            {
+                Opacity = opaque;
+            }
         }
 
         private void AlbumArtTimer_Elapsed(object sender, ElapsedEventArgs e)

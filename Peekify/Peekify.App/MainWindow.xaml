@@ -58,6 +58,9 @@
   <Window.ContextMenu>
     <ContextMenu>
       <MenuItem Header="_Refresh" Name="ContextMenuRefresh"/>
+      <MenuItem Header="_Settings">
+        <MenuItem Header="_Transparency enabled" Name="ContextMenuTransparent"/>
+      </MenuItem>
       <Separator/>
       <MenuItem Header="_About Peekify..." Name="ContextMenuAbout"/>
       <MenuItem Header="E_xit" Name="ContextMenuExit"/>

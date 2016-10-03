@@ -10,5 +10,8 @@ namespace Peekify.App.ApplicationSettings
 
         [DataMember]
         public int WindowLocationTop { get; set; } // No longer used, but keeping just in case
+
+        [DataMember]
+        public bool TransparentMode { get; set; }
     }
 }
