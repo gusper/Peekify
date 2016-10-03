@@ -33,6 +33,5 @@ namespace Peekify.App.ApplicationSettings
         {
             _data = _settingsStore.Load();
         }
-
     }
 }
