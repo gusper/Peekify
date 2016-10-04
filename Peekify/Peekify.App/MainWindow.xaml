@@ -58,6 +58,7 @@
   <Window.ContextMenu>
     <ContextMenu>
       <MenuItem Header="_Refresh" Name="ContextMenuRefresh"/>
+      <MenuItem Header="S_how album art" Name="ContextMenuShowAlbumArt"/>
       <MenuItem Header="_Settings">
         <MenuItem Header="_Transparency enabled" Name="ContextMenuTransparent"/>
         <MenuItem Header="_Launch when Windows starts" Name="ContextMenuAutoStart"/> 

@@ -3,7 +3,7 @@
 0.8.1
 - Added a setting to control transparent mode
 - Added ability to automatically start Peekify when Windows starts
-
+- Option to show album art on demand
 
 0.8.0 (10/3/2016)
 - First version with an installer (MSI)

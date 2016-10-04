@@ -49,6 +49,7 @@ namespace Peekify.App
             DetailsStackPanel.Visibility = Visibility.Collapsed;
 
             ContextMenuRefresh.Click += OnContextMenuRefresh;
+            ContextMenuShowAlbumArt.Click += OnContextMenuShowAlbumArt;
             ContextMenuTransparent.Click += OnContextMenuTransparent;
             ContextMenuAutoStart.Click += OnContextMenuAutoStart;
             ContextMenuAbout.Click += OnContextMenuAbout;
@@ -56,6 +57,11 @@ namespace Peekify.App
             MouseLeftButtonDown += OnAfterDragWindow;
             MouseLeftButtonUp += OnSingleClick;
             MouseDoubleClick += OnDoubleClick;
+        }
+
+        private void OnContextMenuShowAlbumArt(Object sender, RoutedEventArgs e)
+        {
+            ShowAlbumArt();
         }
 
         private void InitializeContextMenus()
