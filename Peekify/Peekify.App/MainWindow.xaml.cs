@@ -77,7 +77,17 @@ namespace Peekify.App
                 return;
 
             var autoRunKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
-            autoRunKey.SetValue("Peekify", Environment.CommandLine);
+
+            if (enabled)
+            {
+                autoRunKey.SetValue("Peekify", Environment.CommandLine);
+                ContextMenuAutoStart.IsChecked = true;
+            }
+            else
+            {
+                autoRunKey.DeleteValue("Peekify");
+                ContextMenuAutoStart.IsChecked = false;
+            }
         }
 
         private bool IsAutoRunEnabled()
