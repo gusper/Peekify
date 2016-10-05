@@ -8,7 +8,7 @@
         Title="About Peekify" Height="300" Width="300">
   <Grid>
     <StackPanel Margin="20">
-      <TextBlock>Peekify</TextBlock>
+      <TextBlock FontWeight="Bold">Peekify</TextBlock>
       <TextBlock>Gus Perez (@gusper)</TextBlock>
       <TextBlock>Zinko Labs LLC</TextBlock>
       <TextBlock>http://zinkolabs.com/peekify</TextBlock>
