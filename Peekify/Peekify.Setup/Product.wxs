@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?define ProductName = "Peekify"?>
-<?define ProductVersion = "0.8.1"?>
+<?define ProductVersion = "0.8.2"?>
 <?define ProductUpgradeCode = "E6BAA9E1-F399-4048-B558-84D13A31BA5E"?>
 <?define ProductCompany = "Zinko Labs LLC"?>
 <?define ProductSupportEmail = "support@zinkolabs.com"?>
@@ -42,7 +42,9 @@
             <File Id="AppExe" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName)"/>
             <File Id="AppExeConfig" Source="$(var.Peekify.App.TargetDir)\$(var.Peekify.App.TargetFileName).config"/>
             <File Id="SpotifyApiDll" Source="$(var.Peekify.App.TargetDir)\spotifyapi.dll"/>
+            <File Id="SpotifyApiLicense" Source="$(var.Peekify.App.ProjectDir)\Licenses\SpotifyAPI-NET_license.txt"/>
             <File Id="NewtonSoftJsonDll" Source="$(var.Peekify.App.TargetDir)\newtonsoft.json.dll"/>
+            <File Id="NewtonSoftJsonLicense" Source="$(var.Peekify.App.ProjectDir)\Licenses\Newtonsoft.Json_license.txt"/>
           </Component>
         </Directory>
       </Directory>
