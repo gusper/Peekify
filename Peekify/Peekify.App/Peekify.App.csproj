@@ -123,6 +123,12 @@
   <ItemGroup>
     <Resource Include="appicon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Licenses\SpotifyAPI-NET_license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Licenses\Newtonsoft.Json_license.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
