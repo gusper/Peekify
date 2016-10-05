@@ -133,7 +133,7 @@ namespace Peekify.App
 
         private void OnContextMenuAbout(Object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Peekify\nBy Gus Perez\nZinko Labs LLC\nhttp://zinkolabs.com/peekify", "About...");
+            new AboutWindow().ShowDialog();
         }
 
         private void OnContextMenuExit(object sender, RoutedEventArgs e)
