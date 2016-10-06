@@ -4,19 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Peekify.App"
-        mc:Ignorable="d"
-        Title="About Peekify" Height="300" Width="300">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Background="#ddd" Foreground="#444" 
+        FontFamily="Segoe UI Light" FontSize="20"
+        Title="About Peekify" Height="400" Width="460">
   <Grid>
     <StackPanel Margin="20">
-      <TextBlock FontWeight="Bold">Peekify</TextBlock>
-      <TextBlock>Gus Perez (@gusper)</TextBlock>
-      <TextBlock>Zinko Labs LLC</TextBlock>
-      <TextBlock>http://zinkolabs.com/peekify</TextBlock>
+      <TextBlock FontFamily="Segoe UI" FontSize="26" FontWeight="Bold" Margin="0,0,0,20">Peekify</TextBlock>
+      <TextBlock>Gus Perez 
+        <Hyperlink x:Name="GusperWebLink" NavigateUri="http://gusperez.com">Web</Hyperlink>
+        <Hyperlink x:Name="GusperTwitterLink" NavigateUri="http://twitter.com/gusper">Twitter</Hyperlink>
+      </TextBlock>
+      <TextBlock>Zinko Labs
+        <Hyperlink x:Name="ZinkoLabsWebLink" NavigateUri="http://zinkolabs.com/peekify">Web</Hyperlink>
+        <Hyperlink x:Name="ZinkoLabsTwitterLink" NavigateUri="http://twitter.com/zinkolabs">Twitter</Hyperlink>
+      </TextBlock>
+      <TextBlock>Source code available on 
+    <Hyperlink x:Name="PeekifyGitHubLink" NavigateUri="https://github.com/gusper/Peekify">GitHub</Hyperlink>
+      </TextBlock>
       <StackPanel Margin="0,20">
-        <TextBlock>3rd-party dependencies:</TextBlock>
+        <TextBlock Text="Built on top of the work of many others:"/>
         <StackPanel Margin="20,3,20,0">
-          <TextBlock>- SpotifyAPI-NET</TextBlock>
-          <TextBlock>- Newtonsoft.Json</TextBlock>
+          <TextBlock>
+            <Hyperlink x:Name="SpotifyApiGitHubLink" NavigateUri="https://github.com/JohnnyCrazy/SpotifyAPI-NET">SpotifyAPI-NET</Hyperlink>
+          </TextBlock>
+          <TextBlock>
+            <Hyperlink x:Name="NewtonsoftJsconGitHubLink" NavigateUri="https://github.com/JamesNK/Newtonsoft.Json">Newtonsoft.Json</Hyperlink>
+          </TextBlock>
+          <TextBlock>App icon from
+            <Hyperlink x:Name="AppIconLink" NavigateUri="http://www.iconarchive.com/show/stark-icons-by-fruityth1ng/Spotify-GB-icon.html">here</Hyperlink>
+            by
+            <Hyperlink x:Name="AppIconAuthorLink" NavigateUri="http://www.nimbling.com">Herman van Boeijen</Hyperlink>
+          </TextBlock>
         </StackPanel>
       </StackPanel>
     </StackPanel>

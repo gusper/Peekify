@@ -19,6 +19,25 @@ namespace Peekify.App
         public AboutWindow()
         {
             InitializeComponent();
+            InitEventHandlers();
+        }
+
+        private void InitEventHandlers()
+        {
+            GusperWebLink.RequestNavigate += OnNavigate;
+            GusperTwitterLink.RequestNavigate += OnNavigate;
+            ZinkoLabsWebLink.RequestNavigate += OnNavigate;
+            ZinkoLabsTwitterLink.RequestNavigate += OnNavigate;
+            PeekifyGitHubLink.RequestNavigate += OnNavigate;
+            SpotifyApiGitHubLink.RequestNavigate += OnNavigate;
+            NewtonsoftJsconGitHubLink.RequestNavigate += OnNavigate;
+            AppIconLink.RequestNavigate += OnNavigate;
+            AppIconAuthorLink.RequestNavigate += OnNavigate;
+        }
+
+        private void OnNavigate(Object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.Uri.AbsoluteUri);
         }
     }
 }
