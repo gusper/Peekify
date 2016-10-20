@@ -16,7 +16,7 @@ namespace Peekify.App
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
-        private const int _pollInterval = 5 * 60 * 1000;
+        private const int _pollInterval = 1 * 60 * 1000;
 
         private Timer _processWatcherTimer;
         private bool _errorState = false;
@@ -69,6 +69,8 @@ namespace Peekify.App
                     nowPlayingTrack.SongTitle = status.Track.TrackResource.Name;
                     nowPlayingTrack.ArtistName = status.Track.ArtistResource.Name;
                     nowPlayingTrack.AlbumTitle = status.Track.AlbumResource.Name;
+
+                    System.Windows.MessageBox.Show($"Track name: '{status.Track.TrackResource.Name}'");
 
                     nowPlayingImage = GetAlbumArtImage(status.Track);
 
