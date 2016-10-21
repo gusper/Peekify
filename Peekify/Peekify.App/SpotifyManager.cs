@@ -16,7 +16,7 @@ namespace Peekify.App
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
-        private const int _pollInterval = 5 * 60 * 1000;
+        private const int _pollInterval = 3 * 60 * 1000;
 
         private Timer _processWatcherTimer;
         private bool _errorState = false;
