@@ -16,7 +16,7 @@ namespace Peekify.App
         private SpotifyLocalAPI _sApi;
 
         private static string _spotifyExecutable = @"\spotify\spotify.exe";
-        private const int _pollInterval = 1 * 60 * 1000;
+        private const int _pollInterval = 5 * 60 * 1000;
 
         private Timer _processWatcherTimer;
         private bool _errorState = false;
@@ -69,12 +69,7 @@ namespace Peekify.App
                     nowPlayingTrack.SongTitle = status.Track.TrackResource.Name;
                     nowPlayingTrack.ArtistName = status.Track.ArtistResource.Name;
                     nowPlayingTrack.AlbumTitle = status.Track.AlbumResource.Name;
-
-                    System.Windows.MessageBox.Show($"Track name: '{status.Track.TrackResource.Name}'");
-
                     nowPlayingImage = GetAlbumArtImage(status.Track);
-
-                    ReportErrorStateChange(false);
                     break;
                 }
                 catch (NullReferenceException)
@@ -85,7 +80,7 @@ namespace Peekify.App
                     }
                     else
                     {
-                        ReportErrorStateChange(true, SpotifyLocalAPI.IsSpotifyRunning() 
+                        ReportStateChange(true, SpotifyLocalAPI.IsSpotifyRunning() 
                             ? $"Error: { _errorStatusText }" : "Spotify is not running");
                         break;
                     }
@@ -190,20 +185,20 @@ namespace Peekify.App
 
             if (!SpotifyLocalAPI.IsSpotifyRunning())
             {
-                ReportErrorStateChange(true, "Spotify is not running");
+                ReportStateChange(true, "Spotify is not running");
                 StartSpotifyProcessWatcher();
                 return false;
             }
 
             if (!SpotifyLocalAPI.IsSpotifyWebHelperRunning())
             {
-                ReportErrorStateChange(true, "Spotify Web Helper not running");
+                ReportStateChange(true, "Spotify Web Helper not running");
                 return false;
             }
 
             if (!_sApi.Connect())
             {
-                ReportErrorStateChange(true, "Failed to connect to Spotify");
+                ReportStateChange(true, "Failed to connect to Spotify");
                 return false;
             }
             else
@@ -212,7 +207,7 @@ namespace Peekify.App
                 _sApi.OnPlayStateChange += OnPlayStateChanged;
                 _sApi.ListenForEvents = true;
 
-                ReportErrorStateChange(false);
+                ReportStateChange(false);
             }
 
             return true;
@@ -225,6 +220,7 @@ namespace Peekify.App
 
         private void CheckForSpotifyProcess(object state)
         {
+            Debug.WriteLine(">>> POLL: CheckForSpotifyProcess <<<");
             var procs = Process.GetProcessesByName("spotify");
             if (procs.Length > 0)
             {
@@ -238,7 +234,7 @@ namespace Peekify.App
             }
         }
 
-        private void ReportErrorStateChange(bool isInErrorState, string errorText = "")
+        private void ReportStateChange(bool isInErrorState, string errorText = "")
         {
             _errorStatusText = errorText;
             _errorState = isInErrorState;

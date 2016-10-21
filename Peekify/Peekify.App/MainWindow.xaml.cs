@@ -33,12 +33,12 @@ namespace Peekify.App
         {
             EnsureSpotifyIsInstalled();
             _sm = new SpotifyManager();
-            CheckAndRespondToErrorState();
+            RespondToStateChange();
             RefreshContent();
 
             _sm.TrackChanged += OnTrackChanged;
             _sm.PlayStateChanged += OnPlayStateChanged;
-            _sm.ErrorStateChanged += OnErrorStateChanged;
+            _sm.ErrorStateChanged += OnStateChanged;
         }
 
         private void InitUI()
@@ -171,9 +171,9 @@ namespace Peekify.App
             _app.Settings.Save();
         }
 
-        private void OnErrorStateChanged(object sender, EventArgs e)
+        private void OnStateChanged(object sender, EventArgs e)
         {
-            CheckAndRespondToErrorState();
+            RespondToStateChange();
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
@@ -267,7 +267,7 @@ namespace Peekify.App
             HideAlbumArt();
         }
 
-        private void CheckAndRespondToErrorState()
+        private void RespondToStateChange()
         {
             if (_sm.IsInErrorState)
             {
@@ -286,6 +286,7 @@ namespace Peekify.App
                     // Show track information
                     StatusInfoLabel.Visibility = Visibility.Collapsed;
                     TrackInfoLabel.Visibility = Visibility.Visible;
+                    RefreshContent();
                 });
             }
         }
