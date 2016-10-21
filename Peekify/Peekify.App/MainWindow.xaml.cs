@@ -211,7 +211,7 @@ namespace Peekify.App
                 AlbumArtSongLabel.Content = track.SongTitle;
                 AlbumArtArtistLabel.Content = track.ArtistName;
                 AlbumArtAlbumLabel.Content = track.AlbumTitle;
-                AlbumArtImage.Source = _sm.CurrentAlbumImage;
+                AlbumArtImage.Source = track.AlbumArt;
             });
         }
 

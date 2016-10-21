@@ -22,7 +22,6 @@ namespace Peekify.App
         private bool _errorState = false;
         private string _errorStatusText = string.Empty;
         private TrackModel _nowPlayingTrack;
-        private BitmapSource _nowPlayingImage = null;
         
         internal event EventHandler TrackChanged;
         internal event EventHandler PlayStateChanged;
@@ -48,16 +47,10 @@ namespace Peekify.App
             get { return _nowPlayingTrack; }
         }
 
-        internal BitmapSource CurrentAlbumImage
-        {
-            get { return _nowPlayingImage; }
-        }
-
         internal void UpdateStatus()
         {
             StatusResponse status;
             var nowPlayingTrack = new TrackModel();
-            BitmapSource nowPlayingImage = null;
 
             var attemptsLeft = 3;
 
@@ -69,7 +62,7 @@ namespace Peekify.App
                     nowPlayingTrack.SongTitle = status.Track.TrackResource.Name;
                     nowPlayingTrack.ArtistName = status.Track.ArtistResource.Name;
                     nowPlayingTrack.AlbumTitle = status.Track.AlbumResource.Name;
-                    nowPlayingImage = GetAlbumArtImage(status.Track);
+                    nowPlayingTrack.AlbumArt = GetAlbumArtImage(status.Track);
                     break;
                 }
                 catch (NullReferenceException)
@@ -88,11 +81,6 @@ namespace Peekify.App
             }
 
             _nowPlayingTrack = nowPlayingTrack;
-
-            if (nowPlayingImage != null)
-            {
-                _nowPlayingImage = (BitmapImage)nowPlayingImage;
-            }
         }
 
         internal static bool IsSpotifyInstalled()
