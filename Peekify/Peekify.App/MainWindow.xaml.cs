@@ -13,7 +13,8 @@ namespace Peekify.App
         private App _app = (App)Application.Current;
         private Timer _albumArtTimer = new Timer();
         private bool _isAlbumArtVisible = false;
-        private const double _albumArtDisplayTime = 5000;
+        private const double _albumArtDisplayTime = 5 * 1000;
+        private const string _winRunRegKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
         public MainWindow()
         {
@@ -82,7 +83,7 @@ namespace Peekify.App
             if (currentState == enabled)
                 return;
 
-            var autoRunKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+            var autoRunKey = Registry.CurrentUser.OpenSubKey(_winRunRegKey, true);
 
             if (enabled)
             {
@@ -99,7 +100,7 @@ namespace Peekify.App
         private bool IsAutoRunEnabled()
         {
             var isAutoStartEnabled = false;
-            var autoRunKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", false);
+            var autoRunKey = Registry.CurrentUser.OpenSubKey(_winRunRegKey, false);
 
             if (autoRunKey.GetValue("Peekify") != null)
             {

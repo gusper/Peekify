@@ -1,13 +1,12 @@
-﻿using System;
+﻿using SpotifyAPI.Local;
+using SpotifyAPI.Local.Enums;
+using SpotifyAPI.Local.Models;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Media.Imaging;
-using SpotifyAPI.Local;
-using SpotifyAPI.Local.Enums;
-using SpotifyAPI.Local.Models;
 
 namespace Peekify.App
 {
@@ -51,7 +50,6 @@ namespace Peekify.App
         {
             StatusResponse status;
             var nowPlayingTrack = new TrackModel();
-
             var attemptsLeft = 3;
 
             while (attemptsLeft-- > 0)
@@ -85,7 +83,8 @@ namespace Peekify.App
 
         internal static bool IsSpotifyInstalled()
         {
-            string pathToSpotify = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + _spotifyExecutable;
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string pathToSpotify =  appDataPath + _spotifyExecutable;
             return File.Exists(pathToSpotify);
         }
 
@@ -109,7 +108,6 @@ namespace Peekify.App
 
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(albumUrlId))
             {
-                Debug.WriteLine("Album art url or urlid were empty strings.");
                 return null;
             }
 
@@ -208,17 +206,11 @@ namespace Peekify.App
 
         private void CheckForSpotifyProcess(object state)
         {
-            Debug.WriteLine(">>> POLL: CheckForSpotifyProcess <<<");
             var procs = Process.GetProcessesByName("spotify");
             if (procs.Length > 0)
             {
-                Debug.WriteLine("Found spotify.exe");
                 _processWatcherTimer.Change(Timeout.Infinite, Timeout.Infinite);
                 UpdateStatus();
-            }
-            else
-            {
-                Debug.WriteLine("Spotify.exe not running");
             }
         }
 
