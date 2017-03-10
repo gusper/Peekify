@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?define ProductName = "Peekify"?>
-<?define ProductVersion = "0.8.2"?>
+<?define ProductVersion = "0.8.3"?>
 <?define ProductUpgradeCode = "E6BAA9E1-F399-4048-B558-84D13A31BA5E"?>
 <?define ProductCompany = "Zinko Labs LLC"?>
 <?define ProductSupportEmail = "support@zinkolabs.com"?>
