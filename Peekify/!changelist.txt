@@ -1,7 +1,9 @@
+0.8.3
+- Less processor usage tweaks
+
 0.8.2
 - Now install licenses for the third-party libraries:
   SpotifyAPI-NET and Newtonsoft.Json
-- 
 
 0.8.1
 - Added a setting to control transparent mode
