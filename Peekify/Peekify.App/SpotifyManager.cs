@@ -167,7 +167,7 @@ namespace Peekify.App
 
         private bool ConnectToLocalSpotifyClient()
         {
-            _sApi = new SpotifyLocalAPI();
+            _sApi = new SpotifyLocalAPI(1000);
 
             if (!SpotifyLocalAPI.IsSpotifyRunning())
             {
